@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileBehaviour : MonoBehaviour
+/**
+ * A tile may hold a robber, a resource type, or a chance token.
+ */
+public class TileBehaviour : Inspectable
 {
     public Material noneMaterial;
     public Material forestMaterial;
@@ -12,10 +15,14 @@ public class TileBehaviour : MonoBehaviour
     public Material fieldMaterial;
     public Material desertMaterial;
 
-    public ResourceType resourceType;
-    public ChanceTokenBehaviour chanceToken;
+    public ResourceType resourceType = ResourceType.None; // The resource type of this tile, i.e. lumber, brick etc.
+    public int chanceTokenValue; // Value that determines what rolls will produce resources
 
-    public void Setup()
+    public GameObject chanceTokenPrefab;
+
+    GameObject chanceToken = null;
+
+    public void LateUpdate()
     {
         // Change material to match the resource type of this tile
         Material currentMaterial = noneMaterial;
@@ -45,32 +52,29 @@ public class TileBehaviour : MonoBehaviour
         }
         GetComponent<MeshRenderer>().material = currentMaterial;
 
-        if (chanceToken.GetValue() == 0)
+        // Instantiate a chance token for this tile
+        if (chanceTokenValue == 0 || resourceType == ResourceType.Desert) // If this token value is 0, there is no token tile
         {
-            chanceToken.gameObject.SetActive(false);
-        } else
+            if(chanceToken != null)
+            {
+                Destroy(chanceToken);
+            }
+        } else // Otherwise render the correct token value
         {
-            chanceToken.gameObject.SetActive(true);
+            if (chanceToken == null)
+            {
+                chanceToken = Instantiate(chanceTokenPrefab, transform);
+
+            }
+            chanceToken.GetComponent<ChanceTokenBehaviour>().SetValue(chanceTokenValue);
         }
     }
 
-    public void SetChanceTokenValue(int value)
+    public override string getInspectionText()
     {
-        chanceToken.SetValue(value);
-    }
-
-    public int GetChanceTokenValue()
-    {
-        return chanceToken.GetValue();
-    }
-
-    public void SetResourceType(ResourceType resourceType)
-    {
-        this.resourceType = resourceType;
-    }
-
-    public ResourceType GetResourceType()
-    {
-        return resourceType;
+        string text = "Tile\n";
+        text += "Col " + GetComponent<FaceBehaviour>().col + ", Row " + GetComponent<FaceBehaviour>().row+"\n";
+        text += resourceType.ToString()+" tile"+(resourceType == ResourceType.Desert || resourceType == ResourceType.None ? "" : "\n" + chanceTokenValue + " roll needed for production.");
+        return text;
     }
 }
