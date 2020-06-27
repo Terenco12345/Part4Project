@@ -263,18 +263,73 @@ public class BoardGrid
     public List<GameObject> GetAdjacentVerticesFromVertex(int col, int row, VertexSpecifier vertexSpec)
     {
         List<GameObject> vertices = new List<GameObject>();
-
+        switch (vertexSpec)
+        {
+            case VertexSpecifier.L:
+                if (gridVertices[col - 2, row + 1, (int)VertexSpecifier.R] != null) { vertices.Add(gridVertices[col - 2, row + 1, (int)VertexSpecifier.R]); }
+                if (gridVertices[col - 1, row + 1, (int)VertexSpecifier.R] != null) { vertices.Add(gridVertices[col - 1, row + 1, (int)VertexSpecifier.R]); }
+                if (gridVertices[col - 1, row, (int)VertexSpecifier.R] != null) { vertices.Add(gridVertices[col - 1, row, (int)VertexSpecifier.R]); }
+                break;
+            case VertexSpecifier.R:
+                if (gridVertices[col + 1, row, (int)VertexSpecifier.L] != null) { vertices.Add(gridVertices[col + 1, row, (int)VertexSpecifier.L]); }
+                if (gridVertices[col + 1, row - 1, (int)VertexSpecifier.L] != null) { vertices.Add(gridVertices[col + 1, row - 1, (int)VertexSpecifier.L]); }
+                if (gridVertices[col + 2, row - 1, (int)VertexSpecifier.L] != null) { vertices.Add(gridVertices[col + 2, row - 1, (int)VertexSpecifier.L]); }
+                break;
+        }
         return vertices;
+    }
+
+    /**
+     * Get all edges connected to a vertex.
+     * - This will be used to calculate validity of placement of settlements.
+     */
+    public List<GameObject> GetAdjacentEdgesFromVertex(int col, int row, VertexSpecifier vertexSpec)
+    {
+        List<GameObject> edges = new List<GameObject>();
+        switch (vertexSpec)
+        {
+            case VertexSpecifier.L:
+                if (gridEdges[col - 1, row, (int)EdgeSpecifier.N] != null) { edges.Add(gridEdges[col - 1, row, (int)EdgeSpecifier.N]); } // Lower Left
+                if (gridEdges[col, row, (int)EdgeSpecifier.W] != null) { edges.Add(gridEdges[col, row, (int)EdgeSpecifier.W]); } // Top
+                if (gridEdges[col - 1, row, (int)EdgeSpecifier.E] != null) { edges.Add(gridEdges[col - 1, row, (int)EdgeSpecifier.E]); } // Lower Right
+                break;
+            case VertexSpecifier.R:
+                if (gridEdges[col + 1, row - 1, (int)EdgeSpecifier.W] != null) { edges.Add(gridEdges[col + 1, row - 1, (int)EdgeSpecifier.W]); }
+                if (gridEdges[col, row, (int)EdgeSpecifier.E] != null) { edges.Add(gridEdges[col, row, (int)EdgeSpecifier.E]); }
+                if (gridEdges[col + 1, row - 1, (int)EdgeSpecifier.N] != null) { edges.Add(gridEdges[col + 1, row - 1, (int)EdgeSpecifier.N]); }
+                break;
+        }
+        return edges;
     }
 
     /**
      * Get all edges connected to an edge.
      * - This will be used to calculate validity of placement of roads.
      */
-    public List<GameObject> GetConnectedEdgesFromEdge(int col, int row, EdgeSpecifier edge)
+    public List<GameObject> GetConnectedEdgesFromEdge(int col, int row, EdgeSpecifier edgeSpec)
     {
         List<GameObject> edges = new List<GameObject>();
-
+        switch (edgeSpec)
+        {
+            case EdgeSpecifier.W:
+                if (gridEdges[col - 1, row, (int)EdgeSpecifier.N] != null) { edges.Add(gridEdges[col - 1, row, (int)EdgeSpecifier.N]); } // Upper Left
+                if (gridEdges[col - 1, row, (int)EdgeSpecifier.E] != null) { edges.Add(gridEdges[col - 1, row, (int)EdgeSpecifier.E]); } // Lower Left
+                if (gridEdges[col - 1, row + 1, (int)EdgeSpecifier.E] != null) { edges.Add(gridEdges[col - 1, row + 1, (int)EdgeSpecifier.E]); } // Upper Right
+                if (gridEdges[col, row, (int)EdgeSpecifier.N] != null) { edges.Add(gridEdges[col, row, (int)EdgeSpecifier.N]); } // Lower Right
+                break;
+            case EdgeSpecifier.N:
+                if (gridEdges[col - 1, row + 1, (int)EdgeSpecifier.E] != null) { edges.Add(gridEdges[col - 1, row + 1, (int)EdgeSpecifier.E]); } // Upper Left
+                if (gridEdges[col, row, (int)EdgeSpecifier.W] != null) { edges.Add(gridEdges[col, row, (int)EdgeSpecifier.W]); } // Lower Left
+                if (gridEdges[col + 1, row, (int)EdgeSpecifier.W] != null) { edges.Add(gridEdges[col + 1, row, (int)EdgeSpecifier.W]); } // Upper Right
+                if (gridEdges[col, row, (int)EdgeSpecifier.E] != null) { edges.Add(gridEdges[col, row, (int)EdgeSpecifier.E]); } // Lower Right
+                break;
+            case EdgeSpecifier.E:
+                if (gridEdges[col + 1, row, (int)EdgeSpecifier.W] != null) { edges.Add(gridEdges[col + 1, row, (int)EdgeSpecifier.W]); } // Upper Left
+                if (gridEdges[col, row, (int)EdgeSpecifier.N] != null) { edges.Add(gridEdges[col, row, (int)EdgeSpecifier.N]); } // Lower Left
+                if (gridEdges[col + 1, row - 1, (int)EdgeSpecifier.N] != null) { edges.Add(gridEdges[col + 1, row - 1, (int)EdgeSpecifier.N]); } // Upper Right
+                if (gridEdges[col + 1, row - 1, (int)EdgeSpecifier.W] != null) { edges.Add(gridEdges[col + 1, row - 1, (int)EdgeSpecifier.W]); } // Lower Right
+                break;
+        }
         return edges;
     }
 
@@ -282,10 +337,24 @@ public class BoardGrid
      * Get all edges connected to a vertex.
      * - This will be used to calculate validity of placement of roads.
      */
-    public List<GameObject> GetConnectedEdgesFromVertex(int col, int row, VertexSpecifier edge)
+    public List<GameObject> GetConnectedVerticesFromEdge(int col, int row, EdgeSpecifier edgeSpec)
     {
-        List<GameObject> edges = new List<GameObject>();
-
-        return edges;
+        List<GameObject> vertices = new List<GameObject>();
+        switch (edgeSpec)
+        {
+            case EdgeSpecifier.W:
+                if (gridVertices[col, row, (int)VertexSpecifier.L] != null) { vertices.Add(gridVertices[col, row, (int)VertexSpecifier.L]); }
+                if (gridVertices[col - 1, row + 1, (int)VertexSpecifier.R] != null) { vertices.Add(gridVertices[col - 1, row + 1, (int)VertexSpecifier.R]); }
+                break;
+            case EdgeSpecifier.N:
+                if (gridVertices[col - 1, row + 1, (int)VertexSpecifier.R] != null) { vertices.Add(gridVertices[col - 1, row + 1, (int)VertexSpecifier.R]); }
+                if (gridVertices[col + 1, row, (int)VertexSpecifier.L] != null) { vertices.Add(gridVertices[col + 1, row, (int)VertexSpecifier.L]); }
+                break;
+            case EdgeSpecifier.E:
+                if (gridVertices[col + 1, row, (int)VertexSpecifier.L] != null) { vertices.Add(gridVertices[col + 1, row, (int)VertexSpecifier.L]); }
+                if (gridVertices[col, row, (int)VertexSpecifier.R] != null) { vertices.Add(gridVertices[col, row, (int)VertexSpecifier.R]); }
+                break;
+        }
+        return vertices;
     }
 }

@@ -39,6 +39,29 @@ public class GameManager : MonoBehaviour
     {
         
     }
+    
+    /**
+     * Method to give 1 free settlement and 1 free road to each player
+     */
+    public void GiveFreeSettlementAndRoadToEachPlayer()
+    {
+        foreach(Player player in players)
+        {
+            player.freeSettlements++;
+            player.freeRoads++;
+        }
+    }
+
+    /**
+     * Dev command to give players 5 of every resource.
+     */
+    public void DebugProduceResources()
+    {
+        foreach(Player player in players)
+        {
+            player.AddResources(5, 5, 5, 5, 5);
+        }
+    }
 
     /**
      * This represents the action of rolling the dice in Catan (the core game loop)

@@ -25,6 +25,10 @@ public class Player : MonoBehaviour
     List<ResourceType> resources = new List<ResourceType>();
     List<DevelopmentCardType> developmentCards = new List<DevelopmentCardType>();
 
+    // Gameplay
+    public int freeSettlements = 0;
+    public int freeRoads = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -174,6 +178,41 @@ public class Player : MonoBehaviour
      */
     bool CanPlaceSettlement(Vertex vertex)
     {
+        // Check if there are any adjacent building -- Spacing requirement
+        List<GameObject> adjacentVertexObjects = GameManager.Instance.board.boardGrid.GetAdjacentVerticesFromVertex(vertex.col, vertex.row, vertex.vertexSpec);
+        foreach(GameObject vertexObject in adjacentVertexObjects)
+        {
+            if(vertexObject.GetComponent<Vertex>().building != null)
+            {
+                return false;
+            }
+        }
+
+        // Check if connected to a road owned by this player
+        bool validRoadNearby = false;
+        List<GameObject> adjacentEdgeObjects = GameManager.Instance.board.boardGrid.GetAdjacentEdgesFromVertex(vertex.col, vertex.row, vertex.vertexSpec);
+        foreach(GameObject edgeObject in adjacentEdgeObjects)
+        {
+            if(edgeObject.GetComponent<Edge>().road != null)
+            {
+                if (edgeObject.GetComponent<Edge>().road.GetComponent<Road>().owner == this)
+                {
+                    validRoadNearby = true;
+                }
+            }
+        }
+        if (!validRoadNearby && freeSettlements <= 0)
+        {
+            return false;
+        }
+
+        // Check if cost requirements met
+        if(!CanAffordResourceTransaction(1, 1, 1, 1, 0) && freeSettlements <= 0)
+        {
+            return false;
+        }
+
+        // Check to see if tile contains a building and have enough settlements in store
         if (vertex.building == null && settlements.Count > 0)
         {
             return true;
@@ -188,6 +227,13 @@ public class Player : MonoBehaviour
      */
     bool CanPlaceCity(Vertex vertex)
     {
+        // Check if cost requirements met
+        if (!CanAffordResourceTransaction(0, 0, 2, 0, 3))
+        {
+            return false;
+        }
+
+        // Check to see if tile contains a settlement and have enough cities in store
         if (vertex.building != null && cities.Count > 0) // If it is this player's settlement
         {
             if (vertex.building.GetComponent<Settlement>() != null)
@@ -209,6 +255,56 @@ public class Player : MonoBehaviour
      */
     bool CanPlaceRoad(Edge edge)
     {
+        // Check if connected to a settlement of the same player
+        bool validbuildingNearby = false;
+        List<GameObject> adjacentVertices = GameManager.Instance.board.boardGrid.GetConnectedVerticesFromEdge(edge.col, edge.row, edge.edgeSpec);
+        foreach (GameObject vertexObject in adjacentVertices)
+        {
+            GameObject buildingObject = vertexObject.GetComponent<Vertex>().building;
+            if (buildingObject != null)
+            {
+                if (buildingObject.GetComponent<Settlement>() != null)
+                {
+                    if (buildingObject.GetComponent<Settlement>().owner == this)
+                    {
+                        validbuildingNearby = true;
+                    }
+                } else if (buildingObject.GetComponent<City>())
+                {
+                    if (buildingObject.GetComponent<City>().owner == this)
+                    {
+                        validbuildingNearby = true;
+                    }
+                }
+            }
+        }
+
+        // Check if connected to a road of the same player
+        bool validRoadNearby = false;
+        List<GameObject> adjacentEdgeObjects = GameManager.Instance.board.boardGrid.GetConnectedEdgesFromEdge(edge.col, edge.row, edge.edgeSpec);
+        foreach (GameObject edgeObject in adjacentEdgeObjects)
+        {
+            if (edgeObject.GetComponent<Edge>().road != null)
+            {
+                if (edgeObject.GetComponent<Edge>().road.GetComponent<Road>().owner == this)
+                {
+                    validRoadNearby = true;
+                }
+            }
+        }
+
+        if (!validRoadNearby && !validbuildingNearby && freeRoads <= 0)
+        {
+            return false;
+        }
+
+        // Check if cost requirements met
+        if (!CanAffordResourceTransaction(1, 0, 0, 1, 0) && freeRoads <= 0)
+        {
+            return false;
+        }
+
+        // Check to see if tile is empty and have enough roads in store
         if (edge.road == null && roads.Count > 0)
         {
             return true;
@@ -226,6 +322,14 @@ public class Player : MonoBehaviour
         // Check input
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            if(freeSettlements > 0)
+            {
+                freeSettlements--;
+            } else
+            {
+                RemoveResources(1, 1, 1, 1, 0);
+            }
+
             Destroy(settlements[settlements.Count - 1]);
             settlements.RemoveAt(settlements.Count - 1);
 
@@ -244,6 +348,8 @@ public class Player : MonoBehaviour
         // Check input
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            RemoveResources(0, 0, 2, 0, 3);
+
             settlements.Add(Instantiate(settlementPrefab, transform));
             Destroy(cities[cities.Count - 1]);
             cities.RemoveAt(cities.Count - 1);
@@ -261,6 +367,14 @@ public class Player : MonoBehaviour
         // Check input
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            if(freeRoads > 0)
+            {
+                freeRoads--;
+            } else
+            {
+                RemoveResources(1, 0, 0, 1, 0);
+            }
+
             Destroy(roads[roads.Count - 1]);
             roads.RemoveAt(roads.Count - 1);
 
@@ -318,14 +432,9 @@ public class Player : MonoBehaviour
      */
     public void RemoveResources(int lumber, int wool, int grain, int brick, int ore)
     {
-        // Check if there are enough resources for this action to take place.
-        if (GetResourceCount(ResourceType.Lumber) >= lumber 
-            && GetResourceCount(ResourceType.Wool) >= wool 
-            && GetResourceCount(ResourceType.Grain) > grain 
-            && GetResourceCount(ResourceType.Brick) > brick 
-            && GetResourceCount(ResourceType.Ore) > ore)
+        if(!CanAffordResourceTransaction(lumber, wool, grain, brick, ore))
         {
-            return;
+            return; // This should throw an exception instead.
         }
 
         // Remove resources
@@ -365,5 +474,24 @@ public class Player : MonoBehaviour
             }
         }
         return count;
+    }
+
+    /**
+     * Check if player can player afford a transaction of resources.
+     */
+    public bool CanAffordResourceTransaction(int lumber, int wool, int grain, int brick, int ore)
+    {
+        // Check if there are enough resources for this action to take place.
+        if (GetResourceCount(ResourceType.Lumber) >= lumber
+            && GetResourceCount(ResourceType.Wool) >= wool
+            && GetResourceCount(ResourceType.Grain) >= grain
+            && GetResourceCount(ResourceType.Brick) >= brick
+            && GetResourceCount(ResourceType.Ore) >= ore)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 }

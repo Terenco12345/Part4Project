@@ -22,12 +22,15 @@ public class GUIManager : MonoBehaviour
         string resourcesString = "";
         // Obtain local player
         Player player = GameManager.Instance.players[0];
-        
+
         int lumber = player.GetResourceCount(ResourceType.Lumber);
         int wool = player.GetResourceCount(ResourceType.Wool);
         int brick = player.GetResourceCount(ResourceType.Brick);
         int grain = player.GetResourceCount(ResourceType.Grain);
         int ore = player.GetResourceCount(ResourceType.Ore);
+
+        resourcesString += "Free Roads: " + player.freeRoads + "\n";
+        resourcesString += "Free Settlements: " + player.freeSettlements + "\n\n";
 
         resourcesString += "Lumber: "+lumber+"\n";
         resourcesString += "Wool: " + wool + "\n";
