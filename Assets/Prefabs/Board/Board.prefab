@@ -45,7 +45,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5027814975249240748}
-  - component: {fileID: 5027814975249240749}
   m_Layer: 0
   m_Name: Board
   m_TagString: Untagged
@@ -69,27 +68,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5027814975249240749
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5027814975249240914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a44159df06a76445a9889f3388d62e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 3683952389361237915, guid: fafeede3489a86f42ab1a8e8ce47c2be,
-    type: 3}
-  vertexPrefab: {fileID: 2037604585482929560, guid: 7a6bbc787c1d2f14abae3d34b984a612,
-    type: 3}
-  edgePrefab: {fileID: 8590194804552374887, guid: eb2e3535ea4f0ba4cb70ec7c48d76d97,
-    type: 3}
-  tileObjects: []
-  robber: {fileID: 8832246168956065534}
-  robberTile: {fileID: 0}
 --- !u!1001 &5027814973726261055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -232,14 +210,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Robber
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -8124058656528873290, guid: 9bf29aae3b1f00f4c81921779a5c0a97, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9bf29aae3b1f00f4c81921779a5c0a97, type: 3}
---- !u!1 &8832246168956065534 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4563292169470565394, guid: 9bf29aae3b1f00f4c81921779a5c0a97,
-    type: 3}
-  m_PrefabInstance: {fileID: 5027814974021634796}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5532998424497530093 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 652823845166362113, guid: 9bf29aae3b1f00f4c81921779a5c0a97,

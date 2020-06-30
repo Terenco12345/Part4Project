@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4847684779736052207}
   - component: {fileID: 4475849192613546969}
   - component: {fileID: 7863813037717255968}
-  - component: {fileID: 6184312340810950504}
   m_Layer: 0
   m_Name: Settlement
   m_TagString: Untagged
@@ -80,15 +79,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6184312340810950504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8438960957759865852}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f06eb7271bf813418d56bc37ae13202, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

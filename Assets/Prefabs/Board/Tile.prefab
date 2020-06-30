@@ -11,9 +11,8 @@ GameObject:
   - component: {fileID: 7378002088869445189}
   - component: {fileID: 2415614348550618290}
   - component: {fileID: 2600899281227992098}
-  - component: {fileID: 3765529841505416422}
   - component: {fileID: -5055973986181556091}
-  - component: {fileID: -5362418095251567464}
+  - component: {fileID: -2722681208287305406}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -82,29 +81,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3765529841505416422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3683952389361237915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e86f7c57a7f46b64ca43b96de7ffefd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  noneMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  forestMaterial: {fileID: 2100000, guid: 6df5e878ed9604343bd9334e26a16181, type: 2}
-  hillMaterial: {fileID: 2100000, guid: eb33f74b6952b4142b919e4d5849ada5, type: 2}
-  meadowMaterial: {fileID: 2100000, guid: 22cc5dda76c5e7f4d901c690efe5e2df, type: 2}
-  mountainMaterial: {fileID: 2100000, guid: f24a921bd6ec43546a600f7d8851a24b, type: 2}
-  fieldMaterial: {fileID: 2100000, guid: 60dc8367738ddb241a436538ee0f57f1, type: 2}
-  desertMaterial: {fileID: 2100000, guid: 255bdfafa444049489a9dc8834a8104c, type: 2}
-  resourceType: 0
-  chanceTokenValue: 0
-  chanceTokenPrefab: {fileID: 7881650181230994622, guid: 17560b2bb575afa4eaa178e4facbd534,
-    type: 3}
 --- !u!64 &-5055973986181556091
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -119,7 +95,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5062246478642505140, guid: 1229b3d3fad252449b86d9622d6af211, type: 3}
---- !u!114 &-5362418095251567464
+--- !u!114 &-2722681208287305406
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,8 +104,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 3683952389361237915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38cb6f013eefdfa42ad18b125f4d134c, type: 3}
+  m_Script: {fileID: 11500000, guid: 92ea473f9ef5d334e9580fb19f76d1a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  col: 0
-  row: 0
+  noneMaterial: {fileID: 2100000, guid: b4cb9bc1a4029434f9621db5729a5b4a, type: 2}
+  forestMaterial: {fileID: 2100000, guid: 6df5e878ed9604343bd9334e26a16181, type: 2}
+  hillMaterial: {fileID: 2100000, guid: eb33f74b6952b4142b919e4d5849ada5, type: 2}
+  meadowMaterial: {fileID: 2100000, guid: 22cc5dda76c5e7f4d901c690efe5e2df, type: 2}
+  mountainMaterial: {fileID: 2100000, guid: f24a921bd6ec43546a600f7d8851a24b, type: 2}
+  fieldMaterial: {fileID: 2100000, guid: 60dc8367738ddb241a436538ee0f57f1, type: 2}
+  desertMaterial: {fileID: 2100000, guid: 255bdfafa444049489a9dc8834a8104c, type: 2}
+  chanceTokenPrefab: {fileID: 7881650181230994622, guid: 17560b2bb575afa4eaa178e4facbd534,
+    type: 3}

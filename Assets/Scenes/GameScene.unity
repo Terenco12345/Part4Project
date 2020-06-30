@@ -457,7 +457,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1433717235}
+      - m_Target: {fileID: 0}
         m_MethodName: DebugProduceResources
         m_Mode: 1
         m_Arguments:
@@ -517,7 +517,6 @@ GameObject:
   - component: {fileID: 528670246}
   - component: {fileID: 528670245}
   - component: {fileID: 528670244}
-  - component: {fileID: 528670248}
   m_Layer: 5
   m_Name: GUI
   m_TagString: Untagged
@@ -610,21 +609,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &528670248
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 528670243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bc8f1d374b231e4596601a73f9e1019, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inspectionText: {fileID: 1435913797}
-  playerResourcesText: {fileID: 169726248}
-  rollText: {fileID: 1613409454}
 --- !u!1 &800412378
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +783,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1433717235}
+      - m_Target: {fileID: 0}
         m_MethodName: RollDice
         m_Mode: 1
         m_Arguments:
@@ -930,18 +914,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 84.88901, y: 0, z: 0}
---- !u!114 &1040137472 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5027814975249240749, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9,
-    type: 3}
-  m_PrefabInstance: {fileID: 5027814975345913773}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a44159df06a76445a9889f3388d62e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1246941724
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,7 +1098,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1433717236}
-  - component: {fileID: 1433717235}
+  - component: {fileID: 1433717237}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1134,23 +1106,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1433717235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1433717234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0802f15948e2ca40bf4c3b7daffabae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  guiManager: {fileID: 528670248}
-  mainCamera: {fileID: 963194227}
-  board: {fileID: 1040137472}
-  players:
-  - {fileID: 1776169188}
 --- !u!4 &1433717236
 Transform:
   m_ObjectHideFlags: 0
@@ -1165,6 +1120,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1433717237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433717234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58e44d32f0ac4a14abc0525bf6438055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1435913795
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,18 +1318,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613409452}
   m_CullTransparentMesh: 0
---- !u!114 &1776169188 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4353894556950434959, guid: 4f01048e800b3574aa01499659abdd81,
-    type: 3}
-  m_PrefabInstance: {fileID: 4353894558186590325}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49c059a7170266d4181d822778a608db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1912236036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,7 +1400,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1433717235}
+      - m_Target: {fileID: 0}
         m_MethodName: GiveFreeSettlementAndRoadToEachPlayer
         m_Mode: 1
         m_Arguments:
@@ -1658,7 +1613,8 @@ PrefabInstance:
       propertyPath: transparentMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 281773893e9cb0d4ab17d4f0ca34440d, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4353894556950434959, guid: 4f01048e800b3574aa01499659abdd81, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4f01048e800b3574aa01499659abdd81, type: 3}
 --- !u!1001 &5027814975345913773
 PrefabInstance:
@@ -1775,5 +1731,33 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: dff03dbe1cbd19848b30391c63c2e5b9, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5027814975249240749, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9, type: 3}
+    - {fileID: 5370516878074298970, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9, type: 3}
+--- !u!1 &5027814975345913774 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5027814975249240914, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 5027814975345913773}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5027814975345913775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5027814975345913774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cabd39f31dccb7f408b309225195637f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  robberObject: {fileID: 1264299476}
+  tilePrefab: {fileID: 3683952389361237915, guid: fafeede3489a86f42ab1a8e8ce47c2be,
+    type: 3}
+  vertexPrefab: {fileID: 2037604585482929560, guid: 7a6bbc787c1d2f14abae3d34b984a612,
+    type: 3}
+  edgePrefab: {fileID: 8590194804552374887, guid: eb2e3535ea4f0ba4cb70ec7c48d76d97,
+    type: 3}
+  gameController: {fileID: 1433717237}
