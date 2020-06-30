@@ -20,7 +20,7 @@ public class Player
 
         storeSettlementNum = 5;
         storeCityNum = 5;
-        storeRoadNum = 5;
+        storeRoadNum = 15;
         
         resources = new List<ResourceType>();
         developmentCards = new List<DevelopmentCardType>();

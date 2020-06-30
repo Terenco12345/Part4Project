@@ -180,4 +180,146 @@ public class BoardHandler
             }
         }
     }
+
+    // Placement
+    /**
+     * Can place settlements only when there are no neighbouring settlements, and if connected to a road that player already owns.
+     * In setup mode, can place settlements not connected to a road.
+     */
+    public bool CanPlaceSettlement(Player player, int col, int row, BoardGrid.VertexSpecifier vertexSpec)
+    {
+        // Check if there are any adjacent building -- Spacing requirement
+        List<Vertex> adjacentVertices = boardGrid.GetAdjacentVerticesFromVertex(col, row, vertexSpec);
+        foreach (Vertex adjacentVertex in adjacentVertices)
+        {
+            if (adjacentVertex.settlement != null)
+            {
+                return false;
+            }
+        }
+
+        // Check if connected to a road owned by this player
+        bool validRoadNearby = false;
+        List<Edge> adjacentEdges = boardGrid.GetAdjacentEdgesFromVertex(col, row, vertexSpec);
+        foreach (Edge adjacentEdge in adjacentEdges)
+        {
+            if (adjacentEdge.road != null)
+            {
+                if (adjacentEdge.road.owner.GetId() == player.GetId())
+                {
+                    validRoadNearby = true;
+                }
+            }
+        }
+        if (!validRoadNearby && player.freeSettlements <= 0)
+        {
+            return false;
+        }
+
+        // Check if cost requirements met
+        if (!player.CanAffordResourceTransaction(1, 1, 1, 1, 0) && player.freeSettlements <= 0)
+        {
+            return false;
+        }
+
+        // Check to see if tile contains a building and have enough settlements in store
+        if (boardGrid.GetVertex(col, row, vertexSpec).settlement == null && player.storeSettlementNum > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Can only place cities the player has the resources, and only to upgrade an existing settlement.
+     */
+    public bool CanPlaceCity(Player player, int col, int row, BoardGrid.VertexSpecifier vertexSpec)
+    {
+        // Check if cost requirements met (there is no such thing as a free city)
+        if (!player.CanAffordResourceTransaction(0, 0, 2, 0, 3))
+        {
+            return false;
+        }
+
+        Vertex vertex = boardGrid.GetVertex(col, row, vertexSpec);
+        // Check to see if vertex contains a settlement and have enough cities in store
+        if (vertex.settlement != null && !vertex.settlement.isCity && player.storeCityNum > 0) // If it is this player's settlement
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * Roads must be connected to a settlement or another road.
+     */
+    public bool CanPlaceRoad(Player player, int col, int row, BoardGrid.EdgeSpecifier edgeSpec)
+    {
+        // Check if connected to a settlement of the same player
+        bool validbuildingNearby = false;
+        List<Vertex> adjacentVertices = boardGrid.GetConnectedVerticesFromEdge(col, row, edgeSpec);
+        foreach (Vertex vertex in adjacentVertices)
+        {
+            Settlement buildingObject = vertex.settlement;
+            if (buildingObject != null)
+            {
+                if (buildingObject != null)
+                {
+                    if (buildingObject.owner.GetId() == player.GetId())
+                    {
+                        validbuildingNearby = true;
+                    }
+                }
+                else if (buildingObject != null)
+                {
+                    if (buildingObject.owner.GetId() == player.GetId())
+                    {
+                        validbuildingNearby = true;
+                    }
+                }
+            }
+        }
+
+        // Check if connected to a road of the same player
+        bool validRoadNearby = false;
+        List<Edge> adjacentEdges = boardGrid.GetConnectedEdgesFromEdge(col, row, edgeSpec);
+        foreach (Edge adjacentEdge in adjacentEdges)
+        {
+            if (adjacentEdge.road != null)
+            {
+                if (adjacentEdge.road.owner.GetId() == player.GetId())
+                {
+                    validRoadNearby = true;
+                }
+            }
+        }
+
+        if (!validRoadNearby && !validbuildingNearby && player.freeRoads <= 0)
+        {
+            return false;
+        }
+
+        // Check if cost requirements met
+        if (!player.CanAffordResourceTransaction(1, 0, 0, 1, 0) && player.freeRoads <= 0)
+        {
+            return false;
+        }
+
+        // Check to see if tile is empty and have enough roads in store
+        Edge edge = boardGrid.GetEdge(col, row, edgeSpec);
+        if (edge.road == null && player.storeRoadNum > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

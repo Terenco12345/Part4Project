@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4353894556950434958}
-  - component: {fileID: 4353894556950434959}
+  - component: {fileID: 114273201759188083}
+  - component: {fileID: 7896194570239899324}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 61.242, z: 0}
---- !u!114 &4353894556950434959
+--- !u!114 &114273201759188083
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,16 +41,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 4353894556950434956}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49c059a7170266d4181d822778a608db, type: 3}
+  m_Script: {fileID: 11500000, guid: 36c2084f2a323d64980b30cb96bf04dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  color: {r: 1, g: 0, b: 0, a: 1}
   settlementPrefab: {fileID: 8438960957759865852, guid: a49b1c2a2c2e7224bb54781b4aaa418f,
     type: 3}
   roadPrefab: {fileID: 2756372969139334744, guid: d1c7bfb1e17da1b46b940564a8dc9e19,
     type: 3}
   cityPrefab: {fileID: 4562821810682599750, guid: e42b6766188926342b3c79d90330e1bb,
     type: 3}
-  settlements: []
-  cities: []
-  roads: []
-  placementGhost: {fileID: 0}
+--- !u!114 &7896194570239899324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4353894556950434956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
