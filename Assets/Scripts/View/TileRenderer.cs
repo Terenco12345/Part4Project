@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TileRenderer : MonoBehaviour
 {
-    public Tile tile;
+    public int col;
+    public int row;
 
     public Material noneMaterial;
     public Material forestMaterial;
@@ -24,11 +25,12 @@ public class TileRenderer : MonoBehaviour
 
     public void LateUpdate()
     {
-        if(tile != null)
+        Face face = FindObjectOfType<GameManager>().GetGame().GetBoardHandler().GetBoardGrid().GetFace(col, row);
+        if(face.tile != null)
         {
             // Change material to match the resource type of this tile
             Material currentMaterial = noneMaterial;
-            switch (tile.resourceType)
+            switch (face.tile.resourceType)
             {
                 case ResourceType.None:
                     currentMaterial = noneMaterial;
@@ -55,7 +57,7 @@ public class TileRenderer : MonoBehaviour
             GetComponent<MeshRenderer>().material = currentMaterial;
 
             // Instantiate a chance token for this tile
-            if (tile.chanceValue == 0 || tile.resourceType == ResourceType.Desert) // If this token value is 0, there is no token tile
+            if (face.tile.chanceValue == 0 || face.tile.resourceType == ResourceType.Desert) // If this token value is 0, there is no token tile
             {
                 if (chanceToken != null)
                 {
@@ -69,8 +71,11 @@ public class TileRenderer : MonoBehaviour
                     chanceToken = Instantiate(chanceTokenPrefab, transform);
 
                 }
-                chanceToken.GetComponent<ChanceTokenRenderer>().SetValue(tile.chanceValue);
+                chanceToken.GetComponent<ChanceTokenRenderer>().SetValue(face.tile.chanceValue);
             }
+        } else
+        {
+            GetComponent<MeshRenderer>().material = noneMaterial;
         }
     }
 }

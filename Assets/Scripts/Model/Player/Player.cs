@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mirror;
 
 public class Player
 {
@@ -32,6 +33,16 @@ public class Player
     public string GetId()
     {
         return id;
+    }
+
+    public List<ResourceType> GetResources()
+    {
+        return resources;
+    }
+
+    public List<DevelopmentCardType> GetDevelopmentCards()
+    {
+        return developmentCards;
     }
 
     /**
@@ -147,5 +158,63 @@ public class Player
         {
             return false;
         }
+    }
+
+    public NetworkWriter Serialize(NetworkWriter writer)
+    {
+        // Player id
+        writer.WriteString(GetId());
+
+        // Player free items
+        writer.WriteInt32(freeRoads);
+        writer.WriteInt32(freeSettlements);
+
+        // Player store
+        writer.WriteInt32(storeCityNum);
+        writer.WriteInt32(storeRoadNum);
+        writer.WriteInt32(storeSettlementNum);
+
+        // Resources
+        List<ResourceType> resources = GetResources();
+        writer.WriteInt32(resources.Count);
+        for (int j = 0; j < resources.Count; j++)
+        {
+            writer.WriteInt32((int)resources[j]);
+        }
+
+        // Development cards
+        List<DevelopmentCardType> developmentCards = GetDevelopmentCards();
+        writer.WriteInt32(developmentCards.Count);
+        for (int j = 0; j < developmentCards.Count; j++)
+        {
+            writer.WriteInt32((int)developmentCards[j]);
+        }
+
+        return writer;
+    }
+
+    public static Player Deserialize(NetworkReader reader)
+    {
+        Player player = new Player(reader.ReadString());
+        player.freeRoads = reader.ReadInt32();
+        player.freeSettlements = reader.ReadInt32();
+        
+        player.storeCityNum = reader.ReadInt32();
+        player.storeRoadNum = reader.ReadInt32();
+        player.storeSettlementNum = reader.ReadInt32();
+
+        int resourceCount = reader.ReadInt32();
+        for(int i = 0; i < resourceCount; i++)
+        {
+            player.GetResources().Add((ResourceType)reader.ReadInt32());
+        }
+
+        int developmentCardCount = reader.ReadInt32();
+        for (int i = 0; i < developmentCardCount; i++)
+        {
+            player.GetDevelopmentCards().Add((DevelopmentCardType)reader.ReadInt32());
+        }
+
+        return player;
     }
 }

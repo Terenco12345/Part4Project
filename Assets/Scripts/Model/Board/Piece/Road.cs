@@ -1,9 +1,9 @@
 ﻿public class Road
 {
-    public Player owner;
+    public string ownerId;
  
     public Road()
     {
-
+        ownerId = "";
     }
 }

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Settlement
 {
+    public string ownerId;
     public bool isCity;
-    public Player owner;
 
     public Settlement()
     {
-        owner = null;
+        ownerId = "";
         isCity = true;
     }
 }

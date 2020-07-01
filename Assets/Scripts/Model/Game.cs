@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using Mirror;
 
 public class Game
 {
+    public static readonly int DEFAULT_BOARD_GRID_COLS = 10;
+    public static readonly int DEFAULT_BOARD_GRID_ROWS = 10;
+
     public static readonly int DEFAULT_FOREST_TILE_AMOUNT = 4;
     public static readonly int DEFAULT_HILL_TILE_AMOUNT = 3;
     public static readonly int DEFAULT_MEADOW_TILE_AMOUNT = 4;
@@ -16,7 +20,10 @@ public class Game
     {
         boardHandler = new BoardHandler();
         players = new List<Player>();
+    }
 
+    public void SetupGame()
+    {
         boardHandler.CreateSettlersBoard();
         boardHandler.CreateTiles();
         boardHandler.SetupTileResourceTypes();
@@ -27,6 +34,11 @@ public class Game
     public BoardHandler GetBoardHandler()
     {
         return boardHandler;
+    }
+
+    public void SetBoardHandler(BoardHandler boardHandler)
+    {
+        this.boardHandler = boardHandler;
     }
 
     public List<Player> GetPlayers()

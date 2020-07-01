@@ -19,10 +19,8 @@ public class BoardBehaviour : NetworkBehaviour
     GameObject[,,] gridVertices;
     GameObject[,,] gridEdges;
 
-    // Start is called before the first frame update
-    public override void OnStartClient()
+    void Start()
     {
-        Debug.Log("Board behaviour started.");
         GameManager gameController = FindObjectOfType<GameManager>();
 
         Face[,] faces = gameController.GetGame().GetBoardHandler().GetBoardGrid().GetFaces();
@@ -40,11 +38,12 @@ public class BoardBehaviour : NetworkBehaviour
                 if (faces[col, row] != null)
                 {
                     GameObject face = Instantiate(tilePrefab, transform);
-                    face.GetComponent<TileRenderer>().tile = faces[col, row].tile;
+                    face.GetComponent<TileRenderer>().col = col;
+                    face.GetComponent<TileRenderer>().row = row;
                     gridFaces[col, row] = face;
                 }
-                
-                if(vertices[col, row, (int)BoardGrid.VertexSpecifier.L] != null)
+
+                if (vertices[col, row, (int)BoardGrid.VertexSpecifier.L] != null)
                 {
                     gridVertices[col, row, (int)BoardGrid.VertexSpecifier.L] = Instantiate(vertexPrefab, transform);
                 }
@@ -68,13 +67,15 @@ public class BoardBehaviour : NetworkBehaviour
             }
         }
 
-        UpdatePositions();
+        SetupPositions();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        GameManager gameController = FindObjectOfType<GameManager>();
+        BoardHandler boardHandler = gameController.GetGame().GetBoardHandler();
 
+        robberObject.transform.position = gridFaces[boardHandler.robberCol, boardHandler.robberRow].transform.position;
     }
 
     /**
@@ -131,7 +132,7 @@ public class BoardBehaviour : NetworkBehaviour
     /**
      * Each face, vertex and edge object stored will have their positions be aligned to the grid.
      */
-    public void UpdatePositions()
+    public void SetupPositions()
     {
         for (int row = 0; row < gridFaces.GetLength(1); row++)
         {
@@ -170,9 +171,5 @@ public class BoardBehaviour : NetworkBehaviour
                 }
             }
         }
-
-        GameManager gameController = FindObjectOfType<GameManager>();
-        BoardHandler boardHandler = gameController.GetGame().GetBoardHandler();
-        robberObject.transform.position = gridFaces[boardHandler.robberCol, boardHandler.robberRow].transform.position;
     }
 }
