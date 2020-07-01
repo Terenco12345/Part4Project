@@ -21,11 +21,11 @@ public class BoardBehaviour : NetworkBehaviour
 
     void Start()
     {
-        GameManager gameController = FindObjectOfType<GameManager>();
-
-        Face[,] faces = gameController.GetGame().GetBoardHandler().GetBoardGrid().GetFaces();
-        Vertex[,,] vertices = gameController.GetGame().GetBoardHandler().GetBoardGrid().GetVertices();
-        Edge[,,] edges = gameController.GetGame().GetBoardHandler().GetBoardGrid().GetEdges();
+        Game game = new Game();
+        
+        Face[,] faces = game.GetBoardHandler().GetBoardGrid().GetFaces();
+        Vertex[,,] vertices = game.GetBoardHandler().GetBoardGrid().GetVertices();
+        Edge[,,] edges = game.GetBoardHandler().GetBoardGrid().GetEdges();
 
         gridFaces = new GameObject[faces.GetLength(0), faces.GetLength(1)];
         gridVertices = new GameObject[faces.GetLength(0), faces.GetLength(1), 2];

@@ -575,7 +575,7 @@ PrefabInstance:
     - target: {fileID: 5027814975249240914, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9,
         type: 3}
       propertyPath: m_Name
-      value: Board (1)
+      value: Board
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9, type: 3}

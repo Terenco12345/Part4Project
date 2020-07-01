@@ -20,11 +20,12 @@ public class Game
     {
         boardHandler = new BoardHandler();
         players = new List<Player>();
+
+        boardHandler.CreateSettlersBoard();
     }
 
     public void SetupGame()
     {
-        boardHandler.CreateSettlersBoard();
         boardHandler.CreateTiles();
         boardHandler.SetupTileResourceTypes();
         boardHandler.SetupChanceTokens();

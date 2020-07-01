@@ -5,7 +5,7 @@ using Mirror;
 
 public class GameManager : NetworkBehaviour
 {
-    Game game;
+    Game game = new Game();
     List<GameObject> players = new List<GameObject>();
 
     public GameObject playerPrefab;
@@ -13,7 +13,6 @@ public class GameManager : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        game = new Game();
         game.SetupGame();
     }
 
@@ -71,6 +70,6 @@ public class GameManager : NetworkBehaviour
         }
         newGame.SetBoardHandler(BoardHandler.Deserialize(reader));
 
-        SetGame(new Game());
+        SetGame(newGame);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mirror;
+using UnityEngine;
 
 public class BoardHandler
 {
@@ -24,6 +25,11 @@ public class BoardHandler
     public BoardGrid GetBoardGrid()
     {
         return boardGrid;
+    }
+
+    public void SetBoardGrid(BoardGrid boardGrid)
+    {
+        this.boardGrid = boardGrid;
     }
 
     /**
@@ -97,7 +103,7 @@ public class BoardHandler
         }
         resources.Add(ResourceType.Desert);
 
-        Random random = new Random();
+        System.Random random = new System.Random();
         // Randomize resources array
         for (int i = 0; i < 100; i++)
         {
@@ -452,6 +458,7 @@ public class BoardHandler
 
     public static BoardHandler Deserialize(NetworkReader reader)
     {
+        Console.WriteLine("Deserialize boardHandler");
         BoardHandler boardHandler = new BoardHandler();
 
         boardHandler.robberCol = reader.ReadInt32();
@@ -468,19 +475,21 @@ public class BoardHandler
                 if (reader.ReadBoolean())
                 {
                     // Face col, row
+                    Debug.Log("Face at " + col + "," + row);
                     boardGrid.CreateFace(col, row);
                     if (reader.ReadBoolean())
                     {
                         boardGrid.GetFace(col, row).tile = new Tile();
                         boardGrid.GetFace(col, row).tile.ownerId = reader.ReadString();
+                        boardGrid.GetFace(col, row).tile.resourceType = (ResourceType)reader.ReadInt32();
                         boardGrid.GetFace(col, row).tile.chanceValue = reader.ReadInt32();
-                        boardGrid.GetFace(col, row).tile.resourceType = (ResourceType) reader.ReadInt32();
                     }
                 }
 
                 // Vertex L exists?
                 if (reader.ReadBoolean())
                 {
+                    Debug.Log("VL at " + col + "," + row);
                     if (reader.ReadBoolean())
                     {
                         boardGrid.GetVertex(col, row, BoardGrid.VertexSpecifier.L).settlement = new Settlement();
@@ -492,6 +501,7 @@ public class BoardHandler
                 // Vertex R exists?
                 if (reader.ReadBoolean())
                 {
+                    Debug.Log("VR at " + col + "," + row);
                     if (reader.ReadBoolean())
                     {
                         boardGrid.GetVertex(col, row, BoardGrid.VertexSpecifier.R).settlement = new Settlement();
@@ -503,6 +513,7 @@ public class BoardHandler
                 // Edge W exists?
                 if (reader.ReadBoolean())
                 {
+                    Debug.Log("EW at " + col + "," + row);
                     if (reader.ReadBoolean())
                     {
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.W).road = new Road();
@@ -513,6 +524,7 @@ public class BoardHandler
                 // Edge N exists?
                 if (reader.ReadBoolean())
                 {
+                    Debug.Log("EN at " + col + "," + row);
                     if (reader.ReadBoolean())
                     {
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.N).road = new Road();
@@ -523,6 +535,7 @@ public class BoardHandler
                 // Edge E exists?
                 if (reader.ReadBoolean())
                 {
+                    Debug.Log("EE at " + col + "," + row);
                     if (reader.ReadBoolean())
                     {
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.E).road = new Road();
@@ -532,6 +545,7 @@ public class BoardHandler
             }
         }
 
+        boardHandler.SetBoardGrid(boardGrid);
         return boardHandler;
     }
 }
