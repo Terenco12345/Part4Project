@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Mirror;
 
+
 public class Game
 {
     public static readonly int DEFAULT_BOARD_GRID_COLS = 10;
@@ -13,8 +14,8 @@ public class Game
     public static readonly int DEFAULT_FIELD_TILE_AMOUNT = 4;
     public static readonly int DEFAULT_DESERT_TILE_AMOUNT = 1;
 
-    BoardHandler boardHandler;
-    List<Player> players;
+    public BoardHandler boardHandler;
+    public List<Player> players;
 
     public Game()
     {
@@ -40,10 +41,5 @@ public class Game
     public void SetBoardHandler(BoardHandler boardHandler)
     {
         this.boardHandler = boardHandler;
-    }
-
-    public List<Player> GetPlayers()
-    {
-        return players;
     }
 }

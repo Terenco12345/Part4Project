@@ -8,6 +8,7 @@ public class PlayerBehaviour : NetworkBehaviour
     Player player = null;
 
     public Color color;
+    public Material transparentMaterial; // Used for placement ghost
 
     public GameObject settlementPrefab;
     public GameObject roadPrefab;
@@ -17,11 +18,13 @@ public class PlayerBehaviour : NetworkBehaviour
     List<GameObject> cities = new List<GameObject>();
     List<GameObject> roads = new List<GameObject>();
 
-    // Start is called before the first frame update
-    public override void OnStartClient()
-    {
-        FindObjectOfType<GameManager>().AddPlayer(gameObject);
+    GameObject placementGhost;
 
+    public PlayerController playerController;
+
+    // Start is called before the first frame update
+    void Start()
+    {
         for (int i = 0; i < 5; i++)
         {
             settlements.Add(Instantiate(settlementPrefab, transform));
@@ -36,6 +39,17 @@ public class PlayerBehaviour : NetworkBehaviour
         }
     }
 
+    public override void OnStartLocalPlayer()
+    {
+        GameManager.Instance.localPlayer = gameObject;
+        playerController.CmdRegisterNewPlayer();
+    }
+
+    public Player GetPlayer()
+    {
+        return player;
+    }
+
     public void SetPlayer(Player player)
     {
         this.player = player;
@@ -44,6 +58,71 @@ public class PlayerBehaviour : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isLocalPlayer)
+        {
+            Ray ray = GameManager.Instance.mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            bool hitSuccess = Physics.Raycast(ray, out hit, 100f);
+
+            if (hitSuccess)
+            {
+                // Inspection
+                if (hit.collider.gameObject.GetComponent<Inspectable>() != null)
+                {
+                    GameManager.Instance.guiManager.inspectionText.text = hit.collider.gameObject.GetComponent<Inspectable>().inspectionText;
+                }
+                else
+                {
+                    GameManager.Instance.guiManager.inspectionText.text = "";
+                }
+
+                // Placement
+                BoardHandler boardHandler = GameManager.Instance.GetGame().GetBoardHandler();
+
+                VertexRenderer vertex = hit.collider.gameObject.GetComponent<VertexRenderer>();
+                EdgeRenderer edge = hit.collider.gameObject.GetComponent<EdgeRenderer>();
+
+                // Show valid placement option if possible
+                if (vertex != null || edge != null)
+                {
+                    // Settlement
+                    if (vertex != null)
+                    {
+                        // Show ghost for settlement
+                        if (boardHandler.CanPlaceSettlement(player, vertex.col, vertex.row, vertex.vertexSpec))
+                        {
+                            UpdatePlacementGhost(settlementPrefab, vertex.transform);
+                            playerController.CmdPlaceSettlement(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                        }
+                        else if (boardHandler.CanPlaceCity(player, vertex.col, vertex.row, vertex.vertexSpec))
+                        {
+                            UpdatePlacementGhost(cityPrefab, vertex.transform);
+                            playerController.CmdPlaceCity(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                        }
+                    }
+
+                    // Road
+                    if (edge != null)
+                    {
+                        // Show ghost for road
+                        if (boardHandler.CanPlaceRoad(player, edge.col, edge.row, edge.edgeSpec))
+                        {
+                            UpdatePlacementGhost(roadPrefab, edge.transform);
+                            playerController.CmdPlaceRoad(vertex.col, vertex.row, (int)edge.edgeSpec);
+                        }
+                    }
+                }
+                else
+                {
+                    DestroyPlacementGhost();
+                }
+            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        player = GameManager.Instance.GetPlayerById(netId+"");
         if(player != null)
         {
             // Update materials to this player's color
@@ -87,6 +166,31 @@ public class PlayerBehaviour : NetworkBehaviour
             {
                 roads[i].SetActive(false);
             }
+        }
+    }
+
+    // Update the inspection placement ghost
+    void UpdatePlacementGhost(GameObject prefab, Transform location)
+    {
+        DestroyPlacementGhost();
+        placementGhost = Instantiate(prefab, location);
+
+        // Create a transparent material
+        Material ghostMaterial = new Material(transparentMaterial);
+        Color ghostColor = color;
+        ghostColor.a = 0.3f;
+
+        ghostMaterial.SetColor("_Color", ghostColor);
+
+        placementGhost.GetComponent<Renderer>().sharedMaterial = ghostMaterial;
+    }
+
+    // Destroy the current placement ghost
+    void DestroyPlacementGhost()
+    {
+        if (placementGhost != null)
+        {
+            Destroy(placementGhost);
         }
     }
 }

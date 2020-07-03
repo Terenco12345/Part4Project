@@ -12,4 +12,16 @@ public class Settlement
         ownerId = "";
         isCity = true;
     }
+
+    public bool Equals(Settlement other)
+    {
+        if (this.ownerId.Equals(other.ownerId) && this.isCity == other.isCity)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

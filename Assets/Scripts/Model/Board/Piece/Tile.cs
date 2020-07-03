@@ -9,4 +9,15 @@
         chanceValue = 0;
         resourceType = ResourceType.None;
     }
+
+    public bool Equals(Tile other)
+    {
+        if(this.ownerId.Equals(other.ownerId) && this.chanceValue == other.chanceValue && this.resourceType == other.resourceType)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 }

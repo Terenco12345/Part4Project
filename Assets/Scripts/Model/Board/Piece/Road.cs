@@ -6,4 +6,16 @@
     {
         ownerId = "";
     }
+
+    public bool Equals(Road other)
+    {
+        if (this.ownerId.Equals(other.ownerId))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

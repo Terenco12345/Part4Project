@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Mirror;
 
 /**
  * This class represents all grid related logic for the Catan game board.
@@ -82,7 +83,8 @@ public class BoardGrid
         return gridEdges;
     }
 
-    public Vertex[,,] GetVertices() {
+    public Vertex[,,] GetVertices()
+    {
         return gridVertices;
     }
 
@@ -345,5 +347,92 @@ public class BoardGrid
                 break;
         }
         return vertices;
+    }
+
+    public bool Equals(BoardGrid other)
+    {
+        for (int col = 0; col < this.GetColCount(); col++)
+        {
+            for (int row = 0; row < this.GetRowCount(); row++)
+            {
+                // This' properties
+                Face face = this.GetFace(col, row);
+
+                Vertex vertexL = this.GetVertex(col, row, VertexSpecifier.L);
+                Vertex vertexR = this.GetVertex(col, row, VertexSpecifier.R);
+
+                Edge edgeW = this.GetEdge(col, row, EdgeSpecifier.W);
+                Edge edgeN = this.GetEdge(col, row, EdgeSpecifier.N);
+                Edge edgeE = this.GetEdge(col, row, EdgeSpecifier.E);
+
+                // Other's properties
+                Face faceOther = other.GetFace(col, row);
+
+                Vertex vertexLOther = other.GetVertex(col, row, VertexSpecifier.L);
+                Vertex vertexROther = other.GetVertex(col, row, VertexSpecifier.R);
+
+                Edge edgeWOther = other.GetEdge(col, row, EdgeSpecifier.W);
+                Edge edgeNOther = other.GetEdge(col, row, EdgeSpecifier.N);
+                Edge edgeEOther = other.GetEdge(col, row, EdgeSpecifier.E);
+
+                // Comparing face
+                if (face == null)
+                {
+                    if (faceOther != null) { return false; }
+                }
+                else
+                {
+                    if (!face.Equals(faceOther)) { return false; }
+                }
+
+                // Comparing vertices
+                if (vertexL == null)
+                {
+                    if (vertexLOther != null) { return false; }
+                }
+                else
+                {
+                    if (!vertexL.Equals(vertexLOther)) { return false; }
+                }
+                if (vertexR == null)
+                {
+                    if (vertexROther != null) { return false; }
+                }
+                else
+                {
+                    if (!vertexR.Equals(vertexROther)) { return false; }
+                }
+
+                // Comparing edges
+                if (edgeW == null)
+                {
+                    if (edgeWOther != null) { return false; }
+                }
+                else
+                {
+                    if (!edgeW.Equals(edgeWOther)) { return false; }
+                }
+
+                if (edgeN == null)
+                {
+                    if (edgeNOther != null) { return false; }
+                }
+                else
+                {
+                    if (!edgeN.Equals(edgeNOther)) { return false; }
+                }
+
+                if (edgeE == null)
+                {
+                    if (edgeNOther != null) { return false; }
+                }
+                else
+                {
+                    if (!edgeE.Equals(edgeEOther)) { return false; }
+                }
+            }
+        }
+
+        return true;
     }
 }

@@ -77,5 +77,17 @@ public class TileRenderer : MonoBehaviour
         {
             GetComponent<MeshRenderer>().material = noneMaterial;
         }
+
+        GetComponent<Inspectable>().inspectionText = getInspectionText();
+    }
+
+    public string getInspectionText()
+    {
+        Face face = FindObjectOfType<GameManager>().GetGame().GetBoardHandler().GetBoardGrid().GetFace(col, row);
+
+        string text = "Tile\n";
+        text += "Col " + col + ", Row " + row + "\n";
+        text += face.tile.resourceType.ToString() + " tile" + (face.tile.resourceType == ResourceType.Desert || face.tile.resourceType == ResourceType.None ? "" : "\n" + face.tile.chanceValue + " roll needed for production.");
+        return text;
     }
 }
