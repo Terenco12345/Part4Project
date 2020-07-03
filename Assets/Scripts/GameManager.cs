@@ -1,122 +1,119 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using Mirror;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
-    // Singleton
-    public static GameManager Instance { get; private set; }
+    public static int PLAYER_ID = 0;
+    
+    public Game game = new Game();
+    public GameObject localPlayer = null;
 
+    public GameObject playerPrefab;
+    public GameObject board;
+    public Camera mainCamera;
     public GUIManager guiManager;
 
-    // Components
-    public Camera mainCamera;
-    public Board board;
-
-    // Players
-    public Player[] players;
-
+    // Singleton
+    public static GameManager Instance { get; private set; }
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public override void OnStartServer()
     {
-        board.SetupBoardGrid();
-        board.RandomizeTileTypes();
-        board.SetupChanceTokens();
-        board.MoveRobberToDesert();
+        game.SetupGame();
     }
 
-    // Update is called once per frame
-    void Update()
+    public Game GetGame()
     {
-        
+        return game;
     }
-    
-    /**
-     * Method to give 1 free settlement and 1 free road to each player
-     */
-    public void GiveFreeSettlementAndRoadToEachPlayer()
+
+    public void SetGame(Game game)
     {
-        foreach(Player player in players)
+        this.game = game;
+    }
+
+    public GameObject GetLocalPlayer()
+    {
+        return localPlayer;
+    }
+
+    public Player GetPlayerById(string id)
+    {
+        foreach(Player player in game.players)
         {
-            player.freeSettlements++;
-            player.freeRoads++;
-        }
-    }
-
-    /**
-     * Dev command to give players 5 of every resource.
-     */
-    public void DebugProduceResources()
-    {
-        foreach(Player player in players)
-        {
-            player.AddResources(5, 5, 5, 5, 5);
-        }
-    }
-
-    /**
-     * This represents the action of rolling the dice in Catan (the core game loop)
-     */
-    public void RollDice()
-    {
-        int diceOne = Random.Range(1, 7);
-        int diceTwo = Random.Range(1, 7);
-
-        int totalRoll = diceOne + diceTwo;
-
-        guiManager.rollText.text = "You rolled a " + totalRoll;
-
-        ProduceResources(totalRoll);
-    }
-
-    /**
-     * This method will produce resources from tiles of a specific roll.
-     * Each player with settlements/cities connected to these tiles will receive the resource
-     * on the tile.
-     */
-    public void ProduceResources(int roll)
-    {
-        foreach(Player player in players)
-        {
-            foreach(GameObject cityObject in player.placedCities)
+            if (player.GetId().Equals(id))
             {
-                Vertex vertex = cityObject.transform.parent.GetComponent<Vertex>();
-                List<GameObject> adjacentTiles = board.boardGrid.GetFacesFromVertexCoordinate(vertex.col, vertex.row, vertex.vertexSpec);
-                foreach (GameObject tileObject in adjacentTiles)
-                {
-                    ResourceType tileResource = tileObject.GetComponent<Tile>().resourceType;
-                    int rollRequirement = tileObject.GetComponent<Tile>().chanceTokenValue;
-
-                    if (rollRequirement == roll)
-                    {
-                        player.AddResource(tileResource, 2);
-                    }
-                }
+                return player;
             }
-            foreach (GameObject settlementObject in player.placedSettlements)
+        }
+
+        return null;
+    }
+
+    public override bool OnSerialize(NetworkWriter writer, bool initialState)
+    {
+        Debug.Log("Serializing...");
+        if (initialState)
+        {
+            ListPlayerReaderWriter.WriteListPlayer(writer, game.players);
+            BoardHandlerReaderWriter.WriteBoard(writer, game.boardHandler);
+            return true;
+        }
+
+        bool wroteSyncVar = false;
+        if((base.syncVarDirtyBits & 1u) != 0u)
+        {
+            if (!wroteSyncVar)
             {
-                Vertex vertex = settlementObject.transform.parent.GetComponent<Vertex>();
-                List<GameObject> adjacentTiles = board.boardGrid.GetFacesFromVertexCoordinate(vertex.col, vertex.row, vertex.vertexSpec);
-                foreach (GameObject tileObject in adjacentTiles)
-                {
-                    ResourceType tileResource = tileObject.GetComponent<Tile>().resourceType;
-                    int rollRequirement = tileObject.GetComponent<Tile>().chanceTokenValue;
-
-                    if (rollRequirement == roll)
-                    {
-                        player.AddResource(tileResource, 1);
-                    }
-                }
+                writer.WritePackedUInt64(base.syncVarDirtyBits);
+                wroteSyncVar = true;
             }
+            ListPlayerReaderWriter.WriteListPlayer(writer, game.players);
+        }
+
+        if ((base.syncVarDirtyBits & 2u) != 0u)
+        {
+            if (!wroteSyncVar)
+            {
+                writer.WritePackedUInt64(base.syncVarDirtyBits);
+                wroteSyncVar = true;
+            }
+            BoardHandlerReaderWriter.WriteBoard(writer, game.boardHandler);
+        }
+        if (!wroteSyncVar)
+        {
+            // write zero dirty bits if nothing changed
+            writer.WritePackedUInt64(0u);
+        }
+
+        return wroteSyncVar;
+    }
+    public override void OnDeserialize(NetworkReader reader, bool initialState)
+    {
+        Debug.Log("Deserializing...");
+        if (initialState)
+        {
+            game.players = ListPlayerReaderWriter.ReadListPlayer(reader);
+            game.boardHandler = BoardHandlerReaderWriter.ReadBoard(reader);
+            return;
+        }
+
+        ulong dirtyBits = reader.ReadPackedUInt64();
+        if ((dirtyBits & 1u) != 0u)
+        {
+            game.players = ListPlayerReaderWriter.ReadListPlayer(reader);
+        }
+        if ((dirtyBits & 2u) != 0u)
+        {
+            game.boardHandler = BoardHandlerReaderWriter.ReadBoard(reader);
         }
     }
 }

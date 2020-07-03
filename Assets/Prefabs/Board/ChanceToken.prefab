@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 6816038389019423075}
   - component: {fileID: 7426801024947851377}
   - component: {fileID: 4864759310461031484}
-  - component: {fileID: 2456672433957308241}
+  - component: {fileID: -8769485691585681241}
   m_Layer: 0
   m_Name: ChanceToken
   m_TagString: Untagged
@@ -174,7 +174,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2456672433957308241
+--- !u!114 &-8769485691585681241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7881650181230994622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79d15189f37bab1488520cfdbba3984e, type: 3}
+  m_Script: {fileID: 11500000, guid: d57c3e57baa0e4048bb078fc86456aa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 1970936575}
