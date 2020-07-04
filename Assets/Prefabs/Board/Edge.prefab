@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4729177751091636545}
   - component: {fileID: 324817120762177691}
+  - component: {fileID: 6326335276913536743}
   m_Layer: 0
   m_Name: Edge
   m_TagString: Untagged
@@ -44,3 +45,20 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6326335276913536743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8590194804552374887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 678a05efc8f40d141ae94c635afcb691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  roadPrefab: {fileID: 2756372969139334744, guid: d1c7bfb1e17da1b46b940564a8dc9e19,
+    type: 3}
+  col: 0
+  row: 0
+  edgeSpec: 0

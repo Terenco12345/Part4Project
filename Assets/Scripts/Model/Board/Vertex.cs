@@ -30,4 +30,15 @@
             return false;
         }
     }
+
+    public override string ToString()
+    {
+        string vertexString = "Vertex: ";
+        if (settlement != null)
+        {
+            vertexString += settlement.ownerId + ", ";
+            vertexString += settlement.isCity;
+        }
+        return vertexString;
+    }
 }

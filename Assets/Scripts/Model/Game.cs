@@ -42,4 +42,27 @@ public class Game
     {
         this.boardHandler = boardHandler;
     }
+
+    /**
+     * Return the player's number based on their ID. This is used to determine player order, and their color.
+     */
+    public int GetPlayerNumberById(string id)
+    {
+        for(int i = 0; i < players.Count; i++)
+        {
+            if (players[i].GetId().Equals(id))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    /**
+     * Return a player in a given position.
+     */
+    public Player GetPlayerAtIndex(int i)
+    {
+        return players[i];
+    }
 }

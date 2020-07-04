@@ -16,9 +16,7 @@ public static class BoardHandlerReaderWriter
         BoardHandler boardHandler = new BoardHandler();
         boardHandler.robberCol = reader.ReadInt32();
         boardHandler.robberRow = reader.ReadInt32();
-
         boardHandler.SetBoardGrid(BoardGridReaderWriter.ReadBoard(reader));
-        
         return boardHandler;
     }
 }

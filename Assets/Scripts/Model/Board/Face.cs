@@ -28,4 +28,15 @@
             return false;
         }
     }
+
+    public override string ToString()
+    {
+        string faceString = "Face: ";
+        if(tile != null)
+        {
+            faceString += tile.resourceType.ToString() + ", ";
+            faceString += tile.chanceValue.ToString();
+        }
+        return faceString;
+    }
 }

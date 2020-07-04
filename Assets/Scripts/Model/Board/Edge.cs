@@ -30,4 +30,14 @@
             return false;
         }
     }
+
+    public override string ToString()
+    {
+        string edgeString = "Edge: ";
+        if (road != null)
+        {
+            edgeString += road.ownerId;
+        }
+        return edgeString;
+    }
 }

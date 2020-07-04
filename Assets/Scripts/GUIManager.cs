@@ -9,6 +9,10 @@ public class GUIManager : MonoBehaviour
     public Text playerResourcesText;
     public Text rollText;
 
+    public Button resourceDebugButton;
+    public Button devResourceButton;
+    public Button giveFreeSettlementsAndRoadsButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,12 +31,20 @@ public class GUIManager : MonoBehaviour
         string resourcesString = "";
         // Obtain local player
         GameObject playerObject = GameManager.Instance.GetLocalPlayer();
-        if(playerObject != null)
+        if (playerObject != null)
         {
             Player player = playerObject.GetComponent<PlayerBehaviour>().GetPlayer();
 
-            if(player != null)
+            if (player != null)
             {
+                inspectionText.gameObject.SetActive(true);
+                playerResourcesText.gameObject.SetActive(true);
+                rollText.gameObject.SetActive(true);
+
+                resourceDebugButton.gameObject.SetActive(true);
+                devResourceButton.gameObject.SetActive(true);
+                giveFreeSettlementsAndRoadsButton.gameObject.SetActive(true);
+
                 int lumber = player.GetResourceCount(ResourceType.Lumber);
                 int wool = player.GetResourceCount(ResourceType.Wool);
                 int brick = player.GetResourceCount(ResourceType.Brick);
@@ -50,6 +62,16 @@ public class GUIManager : MonoBehaviour
 
                 playerResourcesText.text = resourcesString;
             }
+        }
+        else
+        {
+            inspectionText.gameObject.SetActive(false);
+            playerResourcesText.gameObject.SetActive(false);
+            rollText.gameObject.SetActive(false);
+
+            resourceDebugButton.gameObject.SetActive(false);
+            devResourceButton.gameObject.SetActive(false);
+            giveFreeSettlementsAndRoadsButton.gameObject.SetActive(false);
         }
     }
 

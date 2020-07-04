@@ -13,19 +13,65 @@ public class PlayerController : NetworkBehaviour
     [Command]
     public void CmdPlaceSettlement(int col, int row, int vertexSpec)
     {
+        Player player = GameManager.Instance.GetPlayerById(playerBehaviour.netId+"");
 
+        Vertex vertex = GameManager.Instance.GetGame().boardHandler.GetBoardGrid().GetVertex(col, row, (BoardGrid.VertexSpecifier)vertexSpec);
+        Settlement settlement = new Settlement();
+        settlement.ownerId = player.GetId();
+        settlement.isCity = false;
+        vertex.settlement = settlement;
+        if(player.freeSettlements >= 1)
+        {
+            player.freeSettlements--;
+        } else
+        {
+            player.RemoveResources(1, 1, 1, 1, 0);
+        }
+
+        player.storeSettlementNum--;
+
+        GameManager.Instance.SetDirtyBit(0b1111);
     }
 
     [Command]
     public void CmdPlaceCity(int col, int row, int vertexSpec)
     {
+        Player player = GameManager.Instance.GetPlayerById(playerBehaviour.netId + "");
 
+        Vertex vertex = GameManager.Instance.GetGame().boardHandler.GetBoardGrid().GetVertex(col, row, (BoardGrid.VertexSpecifier)vertexSpec);
+        Settlement settlement = new Settlement();
+        settlement.ownerId = player.GetId();
+        settlement.isCity = true;
+        vertex.settlement = settlement;
+        player.RemoveResources(0, 0, 3, 0, 2);
+
+        player.storeCityNum--;
+        player.storeSettlementNum++;
+
+        GameManager.Instance.SetDirtyBit(0b1111);
     }
 
     [Command]
     public void CmdPlaceRoad(int col, int row, int edgeSpec)
     {
+        Player player = GameManager.Instance.GetPlayerById(playerBehaviour.netId + "");
 
+        Edge edge = GameManager.Instance.GetGame().boardHandler.GetBoardGrid().GetEdge(col, row, (BoardGrid.EdgeSpecifier)edgeSpec);
+        Road road = new Road();
+        road.ownerId = player.GetId();
+        edge.road = road;
+        if (player.freeRoads >= 1)
+        {
+            player.freeRoads--;
+        }
+        else
+        {
+            player.RemoveResources(1, 0, 0, 1, 0);
+        }
+
+        player.storeRoadNum--;
+
+        GameManager.Instance.SetDirtyBit(0b1111);
     }
 
     [Command]
@@ -36,7 +82,7 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("Giving resource to " + player.GetId());
             player.AddResources(resourceAmount, resourceAmount, resourceAmount, resourceAmount, resourceAmount);
         }
-        GameManager.Instance.SetDirtyBit(0x1111);
+        GameManager.Instance.SetDirtyBit(0b1111);
     }
 
     [Command]
@@ -48,13 +94,13 @@ public class PlayerController : NetworkBehaviour
             player.freeSettlements++;
             player.freeRoads++;
         }
-        GameManager.Instance.SetDirtyBit(0x0011);
+        GameManager.Instance.SetDirtyBit(0b1111);
     }
 
     [Command]
     public void CmdRegisterNewPlayer()
     {
         GameManager.Instance.GetGame().players.Add(new Player(netId + ""));
-        GameManager.Instance.SetDirtyBit(0x0011);
+        GameManager.Instance.SetDirtyBit(0b1111);
     }
 }

@@ -35,6 +35,7 @@ public class BoardBehaviour : NetworkBehaviour
         {
             for (int row = 0; row < faces.GetLength(1); row++)
             {
+                // Face objects
                 if (faces[col, row] != null)
                 {
                     GameObject face = Instantiate(tilePrefab, transform);
@@ -43,26 +44,48 @@ public class BoardBehaviour : NetworkBehaviour
                     gridFaces[col, row] = face;
                 }
 
+                // Vertex objects
                 if (vertices[col, row, (int)BoardGrid.VertexSpecifier.L] != null)
                 {
-                    gridVertices[col, row, (int)BoardGrid.VertexSpecifier.L] = Instantiate(vertexPrefab, transform);
+                    GameObject vertex = Instantiate(vertexPrefab, transform);
+                    vertex.GetComponent<VertexRenderer>().col = col;
+                    vertex.GetComponent<VertexRenderer>().row = row;
+                    vertex.GetComponent<VertexRenderer>().vertexSpec = BoardGrid.VertexSpecifier.L;
+                    gridVertices[col, row, (int)BoardGrid.VertexSpecifier.L] = vertex;
                 }
                 if (vertices[col, row, (int)BoardGrid.VertexSpecifier.R] != null)
                 {
-                    gridVertices[col, row, (int)BoardGrid.VertexSpecifier.R] = Instantiate(vertexPrefab, transform);
+                    GameObject vertex = Instantiate(vertexPrefab, transform);
+                    vertex.GetComponent<VertexRenderer>().col = col;
+                    vertex.GetComponent<VertexRenderer>().row = row;
+                    vertex.GetComponent<VertexRenderer>().vertexSpec = BoardGrid.VertexSpecifier.R;
+                    gridVertices[col, row, (int)BoardGrid.VertexSpecifier.R] = vertex;
                 }
 
+                // Edge objects
                 if (edges[col, row, (int)BoardGrid.EdgeSpecifier.W] != null)
                 {
-                    gridEdges[col, row, (int)BoardGrid.EdgeSpecifier.W] = Instantiate(edgePrefab, transform);
+                    GameObject edge = Instantiate(edgePrefab, transform);
+                    edge.GetComponent<EdgeRenderer>().col = col;
+                    edge.GetComponent<EdgeRenderer>().row = row;
+                    edge.GetComponent<EdgeRenderer>().edgeSpec = BoardGrid.EdgeSpecifier.W;
+                    gridEdges[col, row, (int)BoardGrid.EdgeSpecifier.W] = edge;
                 }
                 if (edges[col, row, (int)BoardGrid.EdgeSpecifier.N] != null)
                 {
-                    gridEdges[col, row, (int)BoardGrid.EdgeSpecifier.N] = Instantiate(edgePrefab, transform);
+                    GameObject edge = Instantiate(edgePrefab, transform);
+                    edge.GetComponent<EdgeRenderer>().col = col;
+                    edge.GetComponent<EdgeRenderer>().row = row;
+                    edge.GetComponent<EdgeRenderer>().edgeSpec = BoardGrid.EdgeSpecifier.N;
+                    gridEdges[col, row, (int)BoardGrid.EdgeSpecifier.N] = edge;
                 }
                 if (edges[col, row, (int)BoardGrid.EdgeSpecifier.E] != null)
                 {
-                    gridEdges[col, row, (int)BoardGrid.EdgeSpecifier.E] = Instantiate(edgePrefab, transform);
+                    GameObject edge = Instantiate(edgePrefab, transform);
+                    edge.GetComponent<EdgeRenderer>().col = col;
+                    edge.GetComponent<EdgeRenderer>().row = row;
+                    edge.GetComponent<EdgeRenderer>().edgeSpec = BoardGrid.EdgeSpecifier.E;
+                    gridEdges[col, row, (int)BoardGrid.EdgeSpecifier.E] = edge;
                 }
             }
         }
