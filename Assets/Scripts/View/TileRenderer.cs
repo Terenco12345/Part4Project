@@ -78,10 +78,10 @@ public class TileRenderer : MonoBehaviour
             GetComponent<MeshRenderer>().material = noneMaterial;
         }
 
-        GetComponent<Inspectable>().inspectionText = getInspectionText();
+        GetComponent<Inspectable>().inspectionText = GetInspectionText();
     }
 
-    public string getInspectionText()
+    public string GetInspectionText()
     {
         Face face = FindObjectOfType<GameManager>().GetGame().GetBoardHandler().GetBoardGrid().GetFace(col, row);
 

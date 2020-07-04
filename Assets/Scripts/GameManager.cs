@@ -5,8 +5,12 @@ using Mirror;
 
 public class GameManager : NetworkBehaviour
 {
-    public static int PLAYER_ID = 0;
-    
+    public static KeyCode PLACEMENT_KEY = KeyCode.Mouse0;
+
+    public Color[] playerColors;
+    public Vector3[] playerPositions;
+    public Vector3[] playerRotations;
+
     public Game game = new Game();
     public GameObject localPlayer = null;
 
@@ -93,12 +97,14 @@ public class GameManager : NetworkBehaviour
             // write zero dirty bits if nothing changed
             writer.WritePackedUInt64(0u);
         }
-
+        PrintBoardToConsole();
         return wroteSyncVar;
     }
+
     public override void OnDeserialize(NetworkReader reader, bool initialState)
     {
         Debug.Log("Deserializing...");
+        game = new Game();
         if (initialState)
         {
             game.players = ListPlayerReaderWriter.ReadListPlayer(reader);
@@ -115,5 +121,11 @@ public class GameManager : NetworkBehaviour
         {
             game.boardHandler = BoardHandlerReaderWriter.ReadBoard(reader);
         }
+        PrintBoardToConsole();
+    }
+
+    public void PrintBoardToConsole()
+    {
+        Debug.Log(game.boardHandler.GetBoardGrid().ToString());
     }
 }

@@ -28,7 +28,6 @@ public static class BoardGridReaderWriter
                 {
                     writer.WriteBoolean(true);
                     writer.WriteBoolean(true);
-                    writer.WriteString(face.tile.ownerId);
                     writer.WriteInt32((int)face.tile.resourceType);
                     writer.WriteInt32(face.tile.chanceValue);
                 }
@@ -137,23 +136,27 @@ public static class BoardGridReaderWriter
             for (int row = 0; row < rows; row++)
             {
                 // Face exists?
-                if (reader.ReadBoolean())
+                bool faceExists = reader.ReadBoolean();
+                if (faceExists)
                 {
                     // Face col, row
                     boardGrid.CreateFace(col, row);
-                    if (reader.ReadBoolean())
+                    bool tileExists = reader.ReadBoolean();
+                    if (tileExists)
                     {
                         boardGrid.GetFace(col, row).tile = new Tile();
-                        boardGrid.GetFace(col, row).tile.ownerId = reader.ReadString();
                         boardGrid.GetFace(col, row).tile.resourceType = (ResourceType)reader.ReadInt32();
                         boardGrid.GetFace(col, row).tile.chanceValue = reader.ReadInt32();
                     }
                 }
 
                 // Vertex L exists?
-                if (reader.ReadBoolean())
+                bool vertexLExists = reader.ReadBoolean();
+                if (vertexLExists)
                 {
-                    if (reader.ReadBoolean())
+                    boardGrid.CreateVertex(col, row, BoardGrid.VertexSpecifier.L);
+                    bool settlementExists = reader.ReadBoolean();
+                    if (settlementExists)
                     {
                         boardGrid.GetVertex(col, row, BoardGrid.VertexSpecifier.L).settlement = new Settlement();
                         boardGrid.GetVertex(col, row, BoardGrid.VertexSpecifier.L).settlement.ownerId = reader.ReadString();
@@ -162,9 +165,12 @@ public static class BoardGridReaderWriter
                 }
 
                 // Vertex R exists?
-                if (reader.ReadBoolean())
+                bool vertexRExists = reader.ReadBoolean();
+                if (vertexRExists)
                 {
-                    if (reader.ReadBoolean())
+                    boardGrid.CreateVertex(col, row, BoardGrid.VertexSpecifier.R);
+                    bool settlementExists = reader.ReadBoolean();
+                    if (settlementExists)
                     {
                         boardGrid.GetVertex(col, row, BoardGrid.VertexSpecifier.R).settlement = new Settlement();
                         boardGrid.GetVertex(col, row, BoardGrid.VertexSpecifier.R).settlement.ownerId = reader.ReadString();
@@ -173,9 +179,12 @@ public static class BoardGridReaderWriter
                 }
 
                 // Edge W exists?
-                if (reader.ReadBoolean())
+                bool edgeWExists = reader.ReadBoolean();
+                if (edgeWExists)
                 {
-                    if (reader.ReadBoolean())
+                    boardGrid.CreateEdge(col, row, BoardGrid.EdgeSpecifier.W);
+                    bool roadExists = reader.ReadBoolean();
+                    if (roadExists)
                     {
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.W).road = new Road();
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.W).road.ownerId = reader.ReadString();
@@ -183,9 +192,12 @@ public static class BoardGridReaderWriter
                 }
 
                 // Edge N exists?
-                if (reader.ReadBoolean())
+                bool edgeNExists = reader.ReadBoolean();
+                if (edgeNExists)
                 {
-                    if (reader.ReadBoolean())
+                    boardGrid.CreateEdge(col, row, BoardGrid.EdgeSpecifier.N);
+                    bool roadExists = reader.ReadBoolean();
+                    if (roadExists)
                     {
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.N).road = new Road();
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.N).road.ownerId = reader.ReadString();
@@ -193,9 +205,12 @@ public static class BoardGridReaderWriter
                 }
 
                 // Edge E exists?
-                if (reader.ReadBoolean())
+                bool edgeEExists = reader.ReadBoolean();
+                if (edgeEExists)
                 {
-                    if (reader.ReadBoolean())
+                    boardGrid.CreateEdge(col, row, BoardGrid.EdgeSpecifier.E);
+                    bool roadExists = reader.ReadBoolean();
+                    if (roadExists)
                     {
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.E).road = new Road();
                         boardGrid.GetEdge(col, row, BoardGrid.EdgeSpecifier.E).road.ownerId = reader.ReadString();

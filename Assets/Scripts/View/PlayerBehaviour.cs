@@ -92,12 +92,18 @@ public class PlayerBehaviour : NetworkBehaviour
                         if (boardHandler.CanPlaceSettlement(player, vertex.col, vertex.row, vertex.vertexSpec))
                         {
                             UpdatePlacementGhost(settlementPrefab, vertex.transform);
-                            playerController.CmdPlaceSettlement(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                            if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
+                            {
+                                playerController.CmdPlaceSettlement(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                            }
                         }
                         else if (boardHandler.CanPlaceCity(player, vertex.col, vertex.row, vertex.vertexSpec))
                         {
                             UpdatePlacementGhost(cityPrefab, vertex.transform);
-                            playerController.CmdPlaceCity(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                            if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
+                            {
+                                playerController.CmdPlaceCity(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                            }
                         }
                     }
 
@@ -108,7 +114,10 @@ public class PlayerBehaviour : NetworkBehaviour
                         if (boardHandler.CanPlaceRoad(player, edge.col, edge.row, edge.edgeSpec))
                         {
                             UpdatePlacementGhost(roadPrefab, edge.transform);
-                            playerController.CmdPlaceRoad(vertex.col, vertex.row, (int)edge.edgeSpec);
+                            if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
+                            {
+                                playerController.CmdPlaceRoad(edge.col, edge.row, (int)edge.edgeSpec);
+                            }
                         }
                     }
                 }
@@ -118,6 +127,14 @@ public class PlayerBehaviour : NetworkBehaviour
                 }
             }
         }
+
+        if(player != null)
+        {
+            int playerIndex = GameManager.Instance.GetGame().GetPlayerNumberById(player.GetId());
+            color = GameManager.Instance.playerColors[playerIndex];
+            transform.position = GameManager.Instance.playerPositions[playerIndex];
+            transform.rotation = Quaternion.Euler(GameManager.Instance.playerRotations[playerIndex]);
+        }
     }
 
     void LateUpdate()
@@ -125,16 +142,12 @@ public class PlayerBehaviour : NetworkBehaviour
         player = GameManager.Instance.GetPlayerById(netId+"");
         if(player != null)
         {
-            // Update materials to this player's color
-            settlementPrefab.GetComponent<Renderer>().sharedMaterial.SetColor("_Color", color);
-            roadPrefab.GetComponent<Renderer>().sharedMaterial.SetColor("_Color", color);
-            cityPrefab.GetComponent<Renderer>().sharedMaterial.SetColor("_Color", color);
-
             float spacing = 0;
             // Render the items in settlements, cities and roads
             for (int i = 0; i < player.storeSettlementNum; i++)
             {
                 settlements[i].SetActive(true);
+                settlements[i].GetComponent<MeshRenderer>().material.color = color;
                 settlements[i].transform.localPosition = new Vector3(spacing, 0, 0);
                 spacing += 1.4f;
             }
@@ -147,6 +160,7 @@ public class PlayerBehaviour : NetworkBehaviour
             for (int i = 0; i < player.storeCityNum; i++)
             {
                 cities[i].SetActive(true);
+                cities[i].GetComponent<MeshRenderer>().material.color = color;
                 cities[i].transform.localPosition = new Vector3(spacing, 0, 3);
                 spacing += 1.4f;
             }
@@ -159,6 +173,7 @@ public class PlayerBehaviour : NetworkBehaviour
             for (int i = 0; i < player.storeRoadNum; i++)
             {
                 roads[i].SetActive(true);
+                roads[i].GetComponent<MeshRenderer>().material.color = color;
                 roads[i].transform.localPosition = new Vector3(spacing, 0, 5);
                 spacing += 0.8f;
             }

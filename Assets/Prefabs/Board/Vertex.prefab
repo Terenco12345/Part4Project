@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7942562469351188515}
   - component: {fileID: 7848147876213578055}
+  - component: {fileID: 2306835357599527494}
   m_Layer: 0
   m_Name: Vertex
   m_TagString: Untagged
@@ -44,3 +45,22 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2306835357599527494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037604585482929560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fc49be437be0594f8c85602efce0829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settlementPrefab: {fileID: 8438960957759865852, guid: a49b1c2a2c2e7224bb54781b4aaa418f,
+    type: 3}
+  cityPrefab: {fileID: 4562821810682599750, guid: e42b6766188926342b3c79d90330e1bb,
+    type: 3}
+  col: 0
+  row: 0
+  vertexSpec: 0

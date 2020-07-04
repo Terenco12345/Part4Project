@@ -39,26 +39,26 @@ public class BoardHandler
     {
         for (int col = 3; col < 6; col++)
         {
-            boardGrid.CreateFace(col, 5);
+            boardGrid.CreateFaceWithEdgesAndVertices(col, 5);
         }
 
         for (int col = 3; col < 7; col++)
         {
-            boardGrid.CreateFace(col, 4);
+            boardGrid.CreateFaceWithEdgesAndVertices(col, 4);
         }
 
         for (int col = 3; col < 8; col++)
         {
-            boardGrid.CreateFace(col, 3);
+            boardGrid.CreateFaceWithEdgesAndVertices(col, 3);
         }
 
         for (int col = 4; col < 8; col++)
         {
-            boardGrid.CreateFace(col, 2);
+            boardGrid.CreateFaceWithEdgesAndVertices(col, 2);
         }
         for (int col = 5; col < 8; col++)
         {
-            boardGrid.CreateFace(col, 1);
+            boardGrid.CreateFaceWithEdgesAndVertices(col, 1);
         }
     }
 
@@ -253,7 +253,7 @@ public class BoardHandler
 
         Vertex vertex = boardGrid.GetVertex(col, row, vertexSpec);
         // Check to see if vertex contains a settlement and have enough cities in store
-        if (vertex.settlement != null && !vertex.settlement.isCity && player.storeCityNum > 0) // If it is this player's settlement
+        if (vertex.settlement != null && !vertex.settlement.isCity && vertex.settlement.ownerId.Equals(player.GetId()) && player.storeCityNum > 0) // If it is this player's settlement
         {
             return true;
         }
@@ -307,7 +307,7 @@ public class BoardHandler
             }
         }
 
-        if (!validRoadNearby && !validbuildingNearby && player.freeRoads <= 0)
+        if (!validRoadNearby && !validbuildingNearby)
         {
             return false;
         }

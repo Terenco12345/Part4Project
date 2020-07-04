@@ -37,7 +37,7 @@ public class BoardGrid
     Vertex[,,] gridVertices;
     Edge[,,] gridEdges;
 
-    public BoardGrid(int rows, int cols)
+    public BoardGrid(int cols, int rows)
     {
         gridFaces = new Face[cols, rows];
         gridVertices = new Vertex[cols, rows, 2];
@@ -202,7 +202,7 @@ public class BoardGrid
     /**
      * Create a face, and generate all vertices and edges for this face. 
      */
-    public void CreateFace(int col, int row)
+    public void CreateFaceWithEdgesAndVertices(int col, int row)
     {
         gridFaces[col, row] = new Face();
 
@@ -221,6 +221,27 @@ public class BoardGrid
         gridEdges[col, row - 1, (int)EdgeSpecifier.N] = new Edge(); // Bottom
         gridEdges[col - 1, row, (int)EdgeSpecifier.E] = new Edge(); // Bottom Left
         gridEdges[col + 1, row - 1, (int)EdgeSpecifier.W] = new Edge(); // Bottom Right
+    }
+
+    public void CreateFace(int col, int row)
+    {
+        gridFaces[col, row] = new Face();
+    }
+
+    /**
+     * Create a vertex
+     */
+    public void CreateVertex(int col, int row, VertexSpecifier vertexSpecifier)
+    {
+        gridVertices[col, row, (int)vertexSpecifier] = new Vertex();
+    }
+
+    /**
+     * Create an edge
+     */
+    public void CreateEdge(int col, int row, EdgeSpecifier edgeSpecifier)
+    {
+        gridEdges[col, row, (int)edgeSpecifier] = new Edge();
     }
 
     /**
@@ -434,5 +455,70 @@ public class BoardGrid
         }
 
         return true;
+    }
+    
+    public override string ToString()
+    {
+        string boardString = "";
+        for (int col = 0; col < this.GetColCount(); col++)
+        {
+            for (int row = 0; row < this.GetRowCount(); row++)
+            {
+                // This' properties
+                Face face = this.GetFace(col, row);
+
+                Vertex vertexL = this.GetVertex(col, row, VertexSpecifier.L);
+                Vertex vertexR = this.GetVertex(col, row, VertexSpecifier.R);
+
+                Edge edgeW = this.GetEdge(col, row, EdgeSpecifier.W);
+                Edge edgeN = this.GetEdge(col, row, EdgeSpecifier.N);
+                Edge edgeE = this.GetEdge(col, row, EdgeSpecifier.E);
+
+                // Face exists?
+                if (face != null)
+                {
+                    // Face col, row
+                    boardString += "( " + col + "," + row + " ) " + face.ToString();
+                    boardString += "\n";
+                }
+
+                // Vertex L exists?
+                if (vertexL != null)
+                {
+                    boardString += "( " + col + "," + row + ", L " + " ) " + vertexL.ToString();
+                    boardString += "\n";
+                }
+
+                // Vertex R exists?
+                if (vertexR != null)
+                {
+                    boardString += "( " + col + "," + row + ", R " + " ) " + vertexR.ToString();
+                    boardString += "\n";
+                }
+
+                // Edge W exists?
+                if (edgeW != null)
+                {
+                    boardString += "( " + col + "," + row + ", W " + " ) " + edgeW.ToString();
+                    boardString += "\n";
+                }
+
+                // Edge N exists?
+                if (edgeN != null)
+                {
+                    boardString += "( " + col + "," + row + ", N " + " ) " + edgeN.ToString();
+                    boardString += "\n";
+                }
+
+                // Edge E exists?
+                if (edgeE != null)
+                {
+                    boardString += "( " + col + "," + row + ", E " + " ) " + edgeE.ToString();
+                    boardString += "\n";
+                }
+            }
+        }
+
+        return boardString;
     }
 }
