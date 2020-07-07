@@ -5,6 +5,8 @@ public class Player
 {
     string id;
 
+    public PlayerState state;
+
     public int storeSettlementNum;
     public int storeCityNum;
     public int storeRoadNum;
@@ -18,6 +20,8 @@ public class Player
     public Player(string id)
     {
         this.id = id;
+
+        state = PlayerState.ROLLING;
 
         storeSettlementNum = 5;
         storeCityNum = 5;

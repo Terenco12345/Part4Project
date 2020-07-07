@@ -130,7 +130,7 @@ public class PlayerBehaviour : NetworkBehaviour
 
         if(player != null)
         {
-            int playerIndex = GameManager.Instance.GetGame().GetPlayerNumberById(player.GetId());
+            int playerIndex = GameManager.Instance.GetGame().GetPlayerIndexById(player.GetId());
             color = GameManager.Instance.playerColors[playerIndex];
             transform.position = GameManager.Instance.playerPositions[playerIndex];
             transform.rotation = Quaternion.Euler(GameManager.Instance.playerRotations[playerIndex]);

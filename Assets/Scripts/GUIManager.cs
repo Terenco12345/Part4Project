@@ -5,13 +5,19 @@ using UnityEngine.UI;
 
 public class GUIManager : MonoBehaviour
 {
+    public bool devMode = false;
+
     public Text inspectionText;
     public Text playerResourcesText;
     public Text rollText;
+    public Text playerStateText;
 
-    public Button resourceDebugButton;
+    
     public Button devResourceButton;
     public Button giveFreeSettlementsAndRoadsButton;
+
+    public Button endTurnButton;
+    public Button diceRollButton;
 
     // Start is called before the first frame update
     void Start()
@@ -37,13 +43,51 @@ public class GUIManager : MonoBehaviour
 
             if (player != null)
             {
+                // Text
                 inspectionText.gameObject.SetActive(true);
                 playerResourcesText.gameObject.SetActive(true);
                 rollText.gameObject.SetActive(true);
+                playerStateText.gameObject.SetActive(true);
 
-                resourceDebugButton.gameObject.SetActive(true);
-                devResourceButton.gameObject.SetActive(true);
-                giveFreeSettlementsAndRoadsButton.gameObject.SetActive(true);
+                // Dev buttons
+                if (devMode)
+                {
+                    devResourceButton.gameObject.SetActive(true);
+                    giveFreeSettlementsAndRoadsButton.gameObject.SetActive(true);
+                } else
+                {
+                    devResourceButton.gameObject.SetActive(false);
+                    giveFreeSettlementsAndRoadsButton.gameObject.SetActive(false);
+                }
+
+                // Player action buttons - Only shown when it is the local player's turn
+                if (GameManager.Instance.IsPlayerTurn(player))
+                {
+                    endTurnButton.gameObject.SetActive(true);
+                    switch (player.state)
+                    {
+                        case PlayerState.SETUP:
+                            diceRollButton.gameObject.SetActive(false);
+                            break;
+                        case PlayerState.ROLLING:
+                            diceRollButton.gameObject.SetActive(true);
+                            endTurnButton.gameObject.SetActive(false);
+                            break;
+                        case PlayerState.ROBBING:
+                            diceRollButton.gameObject.SetActive(false);
+                            break;
+                        case PlayerState.BUILDING:
+                            diceRollButton.gameObject.SetActive(false);
+                            break;
+                        case PlayerState.TRADING:
+                            diceRollButton.gameObject.SetActive(false);
+                            break;
+                    }
+                } else
+                {
+                    endTurnButton.gameObject.SetActive(false);
+                    diceRollButton.gameObject.SetActive(false);
+                }
 
                 int lumber = player.GetResourceCount(ResourceType.Lumber);
                 int wool = player.GetResourceCount(ResourceType.Wool);
@@ -61,6 +105,14 @@ public class GUIManager : MonoBehaviour
                 resourcesString += "Ore: " + ore + "\n";
 
                 playerResourcesText.text = resourcesString;
+
+                if (GameManager.Instance.IsPlayerTurn(player))
+                {
+                    playerStateText.text = player.state.ToString();
+                } else
+                {
+                    playerStateText.text = "";
+                }
             }
         }
         else
@@ -68,11 +120,32 @@ public class GUIManager : MonoBehaviour
             inspectionText.gameObject.SetActive(false);
             playerResourcesText.gameObject.SetActive(false);
             rollText.gameObject.SetActive(false);
+            playerStateText.gameObject.SetActive(false);
 
-            resourceDebugButton.gameObject.SetActive(false);
+            endTurnButton.gameObject.SetActive(false);
+
+            diceRollButton.gameObject.SetActive(false);
             devResourceButton.gameObject.SetActive(false);
             giveFreeSettlementsAndRoadsButton.gameObject.SetActive(false);
         }
+
+        if (GameManager.Instance.recentRoll == 0)
+        {
+            rollText.text = "There were no recent rolls.";
+        } else
+        {
+            rollText.text = "Recent roll: "+GameManager.Instance.recentRoll;
+        }
+    }
+
+    public void LocalPlayerEndTurn()
+    {
+        GameManager.Instance.GetLocalPlayer().GetComponent<PlayerController>().CmdEndTurn();
+    }
+
+    public void LocalPlayerRollDice()
+    {
+        GameManager.Instance.GetLocalPlayer().GetComponent<PlayerController>().CmdRollDice();
     }
 
     public void DevGiveResources()

@@ -722,6 +722,8 @@ MonoBehaviour:
   - {x: 0, y: 240, z: 0}
   - {x: 0, y: 300, z: 0}
   localPlayer: {fileID: 0}
+  recentRoll: 0
+  turnIndex: 0
   playerPrefab: {fileID: 4353894556950434956, guid: 4f01048e800b3574aa01499659abdd81,
     type: 3}
   board: {fileID: 5027814975249240914, guid: 958a9e5ae7bbc5443b279b3fc3eb80d9, type: 3}
@@ -793,6 +795,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 679785061, guid: 2cc92209aed5bb44fbef6ede474fd1d5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 528670248}
+    - target: {fileID: 679785061, guid: 2cc92209aed5bb44fbef6ede474fd1d5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LocalPlayerEndTurn
+      objectReference: {fileID: 0}
     - target: {fileID: 1821713786, guid: 2cc92209aed5bb44fbef6ede474fd1d5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
