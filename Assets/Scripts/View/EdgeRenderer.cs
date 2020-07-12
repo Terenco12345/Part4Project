@@ -24,7 +24,7 @@ public class EdgeRenderer : MonoBehaviour
         Edge edge = GameManager.Instance.GetGame().boardHandler.GetBoardGrid().GetEdge(col, row, edgeSpec);
         if (edge.road != null)
         {
-            int playerIndex = GameManager.Instance.GetGame().GetPlayerNumberById(edge.road.ownerId);
+            int playerIndex = GameManager.Instance.GetGame().GetPlayerIndexById(edge.road.ownerId);
             roadObject.GetComponent<MeshRenderer>().material.color = GameManager.Instance.playerColors[playerIndex];
             
             roadObject.SetActive(true);

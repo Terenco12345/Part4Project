@@ -245,6 +245,23 @@ public class BoardGrid
     }
 
     /**
+     * Get vertices connected to face.
+     */
+    public List<Vertex> GetVerticesFromFace(int col, int row)
+    {
+        List<Vertex> vertexList = new List<Vertex>();
+
+        vertexList.Add(gridVertices[col + 1, row, (int)VertexSpecifier.L]); // Top right
+        vertexList.Add(gridVertices[col, row, (int)VertexSpecifier.R]); // Right
+        vertexList.Add(gridVertices[col + 1, row - 1, (int)VertexSpecifier.L]); // Bottom Right
+        vertexList.Add(gridVertices[col - 1, row, (int)VertexSpecifier.R]); // Bottom Left
+        vertexList.Add(gridVertices[col, row, (int)VertexSpecifier.L]); // Left
+        vertexList.Add(gridVertices[col - 1, row + 1, (int)VertexSpecifier.R]); // Top Right 
+
+        return vertexList;
+    }
+
+    /**
      * Gets all faces connected to this vertex.
      * - This will be used for calculating which players will receive what resources.
      */

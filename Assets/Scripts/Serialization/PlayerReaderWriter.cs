@@ -9,6 +9,9 @@ public static class PlayerReaderWriter
         // Player id
         writer.WriteString(player.GetId());
 
+        // Player state
+        writer.WriteInt32((int)player.state);
+
         // Player free items
         writer.WriteInt32(player.freeRoads);
         writer.WriteInt32(player.freeSettlements);
@@ -38,6 +41,9 @@ public static class PlayerReaderWriter
     public static Player ReadPlayer(this NetworkReader reader)
     {
         Player player = new Player(reader.ReadString());
+
+        player.state = (PlayerState) reader.ReadInt32();
+
         player.freeRoads = reader.ReadInt32();
         player.freeSettlements = reader.ReadInt32();
 

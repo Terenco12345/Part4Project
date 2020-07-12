@@ -27,7 +27,7 @@ public class VertexRenderer : MonoBehaviour
         Vertex vertex = GameManager.Instance.GetGame().boardHandler.GetBoardGrid().GetVertex(col, row, vertexSpec);
         if(vertex.settlement != null)
         {
-            int playerIndex = GameManager.Instance.GetGame().GetPlayerNumberById(vertex.settlement.ownerId);
+            int playerIndex = GameManager.Instance.GetGame().GetPlayerIndexById(vertex.settlement.ownerId);
             settlementObject.GetComponent<MeshRenderer>().material.color = GameManager.Instance.playerColors[playerIndex];
             cityObject.GetComponent<MeshRenderer>().material.color = GameManager.Instance.playerColors[playerIndex];
             if (vertex.settlement.isCity)
