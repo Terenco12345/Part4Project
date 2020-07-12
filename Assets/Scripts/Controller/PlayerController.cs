@@ -153,6 +153,13 @@ public class PlayerController : NetworkBehaviour
         GameManager.Instance.SetDirtyBit(0b111111);
     }
 
+    [Command]
+    public void CmdMoveToBuildingPhase()
+    {
+        Player thisPlayer = GameManager.Instance.GetPlayerById(playerBehaviour.netId + "");
+        thisPlayer.state = PlayerState.BUILDING;
+    }
+
     // Developer commands
     [Command]
     public void CmdDevGiveEachPlayerResources(int resourceAmount)
@@ -193,4 +200,5 @@ public class PlayerController : NetworkBehaviour
 
         GameManager.Instance.SetDirtyBit(0b111111);
     }
+
 }

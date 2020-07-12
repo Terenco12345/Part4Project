@@ -17,7 +17,10 @@ public class GUIManager : MonoBehaviour
     public Button giveFreeSettlementsAndRoadsButton;
 
     public Button endTurnButton;
+    public Button endPhaseButton;
     public Button diceRollButton;
+
+    public NotificationTextBehaviour notificationText;
 
     // Start is called before the first frame update
     void Start()
@@ -63,24 +66,25 @@ public class GUIManager : MonoBehaviour
                 // Player action buttons - Only shown when it is the local player's turn
                 if (GameManager.Instance.IsPlayerTurn(player))
                 {
-                    endTurnButton.gameObject.SetActive(true);
+                    diceRollButton.gameObject.SetActive(false);
+                    endPhaseButton.gameObject.SetActive(false);
+                    endTurnButton.gameObject.SetActive(false);
                     switch (player.state)
                     {
                         case PlayerState.SETUP:
-                            diceRollButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(true);
                             break;
                         case PlayerState.ROLLING:
                             diceRollButton.gameObject.SetActive(true);
-                            endTurnButton.gameObject.SetActive(false);
                             break;
                         case PlayerState.ROBBING:
-                            diceRollButton.gameObject.SetActive(false);
+                            endPhaseButton.gameObject.SetActive(true);
                             break;
                         case PlayerState.BUILDING:
-                            diceRollButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(true);
                             break;
                         case PlayerState.TRADING:
-                            diceRollButton.gameObject.SetActive(false);
+                            endPhaseButton.gameObject.SetActive(true);
                             break;
                     }
                 } else
@@ -123,6 +127,7 @@ public class GUIManager : MonoBehaviour
             playerStateText.gameObject.SetActive(false);
 
             endTurnButton.gameObject.SetActive(false);
+            endPhaseButton.gameObject.SetActive(false);
 
             diceRollButton.gameObject.SetActive(false);
             devResourceButton.gameObject.SetActive(false);
@@ -138,9 +143,24 @@ public class GUIManager : MonoBehaviour
         }
     }
 
+    public void LocalPlayerMoveToBuildingPhase()
+    {
+        notificationText.DisplayText("Entering building phase...");
+        GameManager.Instance.GetLocalPlayer().GetComponent<PlayerController>().CmdMoveToBuildingPhase();
+    }
+
     public void LocalPlayerEndTurn()
     {
-        GameManager.Instance.GetLocalPlayer().GetComponent<PlayerController>().CmdEndTurn();
+        // Shouldn't be able to end turn with free stuff
+        Player player = GameManager.Instance.GetLocalPlayer().GetComponent<PlayerBehaviour>().GetPlayer();
+        if (player.freeRoads > 0 || player.freeSettlements > 0)
+        {
+            notificationText.DisplayText("You cannot end a turn when you still have free settlements or roads!");
+        } else
+        {
+            notificationText.DisplayText("Turn ended.");
+            GameManager.Instance.GetLocalPlayer().GetComponent<PlayerController>().CmdEndTurn();
+        }
     }
 
     public void LocalPlayerRollDice()
@@ -150,11 +170,13 @@ public class GUIManager : MonoBehaviour
 
     public void DevGiveResources()
     {
+        notificationText.DisplayText("Giving resources to all players.");
         GameManager.Instance.GetLocalPlayer().GetComponent<PlayerController>().CmdDevGiveEachPlayerResources(5);
     }
 
     public void DevGiveFreeRoadsAndSettlements()
     {
+        notificationText.DisplayText("Giving free roads and settlements to all players.");
         GameManager.Instance.GetLocalPlayer().GetComponent<PlayerController>().CmdDevGiveEachPlayerFreeRoadsAndSettlements();
     }
 }
