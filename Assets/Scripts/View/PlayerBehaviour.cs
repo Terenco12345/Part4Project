@@ -76,51 +76,56 @@ public class PlayerBehaviour : NetworkBehaviour
                     GameManager.Instance.guiManager.inspectionText.text = "";
                 }
 
-                // Placement
-                BoardHandler boardHandler = GameManager.Instance.GetGame().GetBoardHandler();
-
-                VertexRenderer vertex = hit.collider.gameObject.GetComponent<VertexRenderer>();
-                EdgeRenderer edge = hit.collider.gameObject.GetComponent<EdgeRenderer>();
-
-                // Show valid placement option if possible
-                if (vertex != null || edge != null)
+                // Should only be able to place during placement phase on this player's turn.
+                if (GameManager.Instance.IsPlayerTurn(player))
                 {
-                    // Settlement
-                    if (vertex != null)
-                    {
-                        // Show ghost for settlement
-                        if (boardHandler.CanPlaceSettlement(player, vertex.col, vertex.row, vertex.vertexSpec))
-                        {
-                            UpdatePlacementGhost(settlementPrefab, vertex.transform);
-                            if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
-                            {
-                                playerController.CmdPlaceSettlement(vertex.col, vertex.row, (int)vertex.vertexSpec);
-                            }
-                        }
-                        else if (boardHandler.CanPlaceCity(player, vertex.col, vertex.row, vertex.vertexSpec))
-                        {
-                            UpdatePlacementGhost(cityPrefab, vertex.transform);
-                            if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
-                            {
-                                playerController.CmdPlaceCity(vertex.col, vertex.row, (int)vertex.vertexSpec);
-                            }
-                        }
-                    }
+                    // Placement
+                    BoardHandler boardHandler = GameManager.Instance.GetGame().GetBoardHandler();
 
-                    // Road
-                    if (edge != null)
+                    VertexRenderer vertex = hit.collider.gameObject.GetComponent<VertexRenderer>();
+                    EdgeRenderer edge = hit.collider.gameObject.GetComponent<EdgeRenderer>();
+
+                    // Show valid placement option if possible
+                    if (vertex != null || edge != null)
                     {
-                        // Show ghost for road
-                        if (boardHandler.CanPlaceRoad(player, edge.col, edge.row, edge.edgeSpec))
+                        // Settlement
+                        if (vertex != null)
                         {
-                            UpdatePlacementGhost(roadPrefab, edge.transform);
-                            if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
+                            // Show ghost for settlement
+                            if (boardHandler.CanPlaceSettlement(player, vertex.col, vertex.row, vertex.vertexSpec))
                             {
-                                playerController.CmdPlaceRoad(edge.col, edge.row, (int)edge.edgeSpec);
+                                UpdatePlacementGhost(settlementPrefab, vertex.transform);
+                                if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
+                                {
+                                    playerController.CmdPlaceSettlement(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                                }
+                            }
+                            else if (boardHandler.CanPlaceCity(player, vertex.col, vertex.row, vertex.vertexSpec))
+                            {
+                                UpdatePlacementGhost(cityPrefab, vertex.transform);
+                                if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
+                                {
+                                    playerController.CmdPlaceCity(vertex.col, vertex.row, (int)vertex.vertexSpec);
+                                }
+                            }
+                        }
+
+                        // Road
+                        if (edge != null)
+                        {
+                            // Show ghost for road
+                            if (boardHandler.CanPlaceRoad(player, edge.col, edge.row, edge.edgeSpec))
+                            {
+                                UpdatePlacementGhost(roadPrefab, edge.transform);
+                                if (Input.GetKeyDown(GameManager.PLACEMENT_KEY))
+                                {
+                                    playerController.CmdPlaceRoad(edge.col, edge.row, (int)edge.edgeSpec);
+                                }
                             }
                         }
                     }
                 }
+                
                 else
                 {
                     DestroyPlacementGhost();

@@ -12,10 +12,6 @@ public class GUIManager : MonoBehaviour
     public Text rollText;
     public Text playerStateText;
 
-    
-    public Button devResourceButton;
-    public Button giveFreeSettlementsAndRoadsButton;
-
     public Button endTurnButton;
     public Button endPhaseButton;
     public Button diceRollButton;
@@ -51,17 +47,6 @@ public class GUIManager : MonoBehaviour
                 playerResourcesText.gameObject.SetActive(true);
                 rollText.gameObject.SetActive(true);
                 playerStateText.gameObject.SetActive(true);
-
-                // Dev buttons
-                if (devMode)
-                {
-                    devResourceButton.gameObject.SetActive(true);
-                    giveFreeSettlementsAndRoadsButton.gameObject.SetActive(true);
-                } else
-                {
-                    devResourceButton.gameObject.SetActive(false);
-                    giveFreeSettlementsAndRoadsButton.gameObject.SetActive(false);
-                }
 
                 // Player action buttons - Only shown when it is the local player's turn
                 if (GameManager.Instance.IsPlayerTurn(player))
@@ -130,8 +115,6 @@ public class GUIManager : MonoBehaviour
             endPhaseButton.gameObject.SetActive(false);
 
             diceRollButton.gameObject.SetActive(false);
-            devResourceButton.gameObject.SetActive(false);
-            giveFreeSettlementsAndRoadsButton.gameObject.SetActive(false);
         }
 
         if (GameManager.Instance.recentRoll == 0)

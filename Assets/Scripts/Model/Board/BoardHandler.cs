@@ -268,7 +268,9 @@ public class BoardHandler
      */
     public bool CanPlaceRoad(Player player, int col, int row, BoardGrid.EdgeSpecifier edgeSpec)
     {
+
         // Check if connected to a settlement of the same player
+        bool validbuildingWithNoRoadsNearby = false;
         bool validbuildingNearby = false;
         List<Vertex> adjacentVertices = boardGrid.GetConnectedVerticesFromEdge(col, row, edgeSpec);
         foreach (Vertex vertex in adjacentVertices)
@@ -281,13 +283,26 @@ public class BoardHandler
                     if (buildingObject.ownerId == player.GetId())
                     {
                         validbuildingNearby = true;
-                    }
-                }
-                else if (buildingObject != null)
-                {
-                    if (buildingObject.ownerId == player.GetId())
-                    {
-                        validbuildingNearby = true;
+                        
+                        int[] vertexPos = boardGrid.GetVertexPosition(vertex);
+                        if(vertexPos != null)
+                        {
+                            List<Edge> edgesTemp = boardGrid.GetAdjacentEdgesFromVertex(vertexPos[0], vertexPos[1], (BoardGrid.VertexSpecifier)vertexPos[2]);
+
+                            int roadCount = 0;
+                            foreach(Edge edgeTemp in edgesTemp)
+                            {
+                                if(edgeTemp.road != null)
+                                {
+                                    roadCount++;
+                                } 
+                            }
+
+                            if(roadCount == 0)
+                            {
+                                validbuildingWithNoRoadsNearby = true;
+                            }
+                        }
                     }
                 }
             }
@@ -302,9 +317,28 @@ public class BoardHandler
             {
                 if (adjacentEdge.road.ownerId == player.GetId())
                 {
-                    validRoadNearby = true;
+                    // Check that if the road is connected, that it is not interrupted by an enemy settlement
+                    int[] adjacentEdgeCoords = boardGrid.GetEdgeCoordinates(adjacentEdge);
+                    Vertex vertexBetweenRoads = boardGrid.GetVertexBetweenTwoConnectedEdges(col, row, edgeSpec, adjacentEdgeCoords[0], adjacentEdgeCoords[1], (BoardGrid.EdgeSpecifier)adjacentEdgeCoords[2]);
+                    
+                    if (vertexBetweenRoads.settlement != null)
+                    {
+                        if(vertexBetweenRoads.settlement.ownerId == player.GetId())
+                        {
+                            validRoadNearby = true;
+                        }
+                    } else
+                    {
+                        validRoadNearby = true;
+                    }
                 }
             }
+        }
+
+        // If it's the second turn, only let the player place next to the settlement with no road
+        if (GameManager.Instance.GetTurnCycle() == 2 && !validbuildingWithNoRoadsNearby)
+        {
+            return false;
         }
 
         if (!validRoadNearby && !validbuildingNearby)

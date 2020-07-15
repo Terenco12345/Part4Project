@@ -17,8 +17,9 @@ public class PlayerController : NetworkBehaviour
     public void CmdPlaceSettlement(int col, int row, int vertexSpec)
     {
         Player player = GameManager.Instance.GetPlayerById(playerBehaviour.netId+"");
+        BoardGrid boardGrid = GameManager.Instance.GetGame().boardHandler.GetBoardGrid();
 
-        Vertex vertex = GameManager.Instance.GetGame().boardHandler.GetBoardGrid().GetVertex(col, row, (BoardGrid.VertexSpecifier)vertexSpec);
+        Vertex vertex = boardGrid.GetVertex(col, row, (BoardGrid.VertexSpecifier)vertexSpec);
         Settlement settlement = new Settlement();
         settlement.ownerId = player.GetId();
         settlement.isCity = false;
@@ -33,7 +34,19 @@ public class PlayerController : NetworkBehaviour
 
         player.storeSettlementNum--;
 
-        GameManager.Instance.SetDirtyBit(0b111111);
+        // If this was the second turn, give resources related to tiles surrounding this settlement to player.
+        if(GameManager.Instance.GetTurnCycle() == 2)
+        {
+            foreach(Face face in boardGrid.GetFacesFromVertexCoordinate(col, row, (BoardGrid.VertexSpecifier)vertexSpec))
+            {
+                if(face.tile != null)
+                {
+                    player.AddResource(face.tile.resourceType, 1);
+                }
+            }
+        }
+
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     /**
@@ -54,7 +67,7 @@ public class PlayerController : NetworkBehaviour
         player.storeCityNum--;
         player.storeSettlementNum++;
 
-        GameManager.Instance.SetDirtyBit(0b111111);
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     /**
@@ -80,7 +93,7 @@ public class PlayerController : NetworkBehaviour
 
         player.storeRoadNum--;
 
-        GameManager.Instance.SetDirtyBit(0b111111);
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     /**
@@ -91,22 +104,28 @@ public class PlayerController : NetworkBehaviour
     {
         // Update turn index
         GameManager.Instance.turnIndex = GameManager.Instance.GetNextTurnIndex();
-
-        // Set next player's state to rolling
-        Player nextPlayer = GameManager.Instance.GetGame().GetPlayerAtIndex(GameManager.Instance.turnIndex);
-        nextPlayer.state = PlayerState.ROLLING;
-
         GameManager.Instance.turnCount++;
 
+        // Set next player's state to rolling
+        Player nextPlayer = null;
+        if(GameManager.Instance.GetTurnCycle() == 2)
+        {
+            nextPlayer = GameManager.Instance.GetGame().GetPlayerAtIndex(GameManager.Instance.GetGame().players.Count - 1 - GameManager.Instance.turnIndex);
+        } else
+        {
+            nextPlayer = GameManager.Instance.GetGame().GetPlayerAtIndex(GameManager.Instance.turnIndex);
+        }
+        nextPlayer.state = PlayerState.ROLLING;
+
         // If still within the first two turn cycles, give a free settlement and road to the next player
-        if (GameManager.Instance.turnCount < GameManager.Instance.GetGame().players.Count * 2)
+        if (GameManager.Instance.GetTurnCycle() <= 2)
         {
             nextPlayer.freeRoads++;
             nextPlayer.freeSettlements++;
             nextPlayer.state = PlayerState.SETUP;
         }
 
-        GameManager.Instance.SetDirtyBit(0b111111);
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     [Command]
@@ -150,7 +169,7 @@ public class PlayerController : NetworkBehaviour
             }
         }
 
-        GameManager.Instance.SetDirtyBit(0b111111);
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     [Command]
@@ -158,6 +177,8 @@ public class PlayerController : NetworkBehaviour
     {
         Player thisPlayer = GameManager.Instance.GetPlayerById(playerBehaviour.netId + "");
         thisPlayer.state = PlayerState.BUILDING;
+
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     // Developer commands
@@ -169,7 +190,7 @@ public class PlayerController : NetworkBehaviour
             Debug.Log("Giving resource to " + player.GetId());
             player.AddResources(resourceAmount, resourceAmount, resourceAmount, resourceAmount, resourceAmount);
         }
-        GameManager.Instance.SetDirtyBit(0b111111);
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     [Command]
@@ -181,7 +202,7 @@ public class PlayerController : NetworkBehaviour
             player.freeSettlements++;
             player.freeRoads++;
         }
-        GameManager.Instance.SetDirtyBit(0b111111);
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
     [Command]
@@ -198,7 +219,7 @@ public class PlayerController : NetworkBehaviour
             playerOne.freeSettlements++;
         }
 
-        GameManager.Instance.SetDirtyBit(0b111111);
+        GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
 }
