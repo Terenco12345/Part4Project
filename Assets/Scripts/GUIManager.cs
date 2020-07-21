@@ -7,10 +7,14 @@ public class GUIManager : MonoBehaviour
 {
     public bool devMode = false;
 
+    public Text lumberText;
+    public Text brickText;
+    public Text woolText;
+    public Text grainText;
+    public Text oreText;
+
     public Text inspectionText;
-    public Text playerResourcesText;
     public Text rollText;
-    public Text playerStateText;
 
     public Button endTurnButton;
     public Button endPhaseButton;
@@ -33,7 +37,6 @@ public class GUIManager : MonoBehaviour
         }
 
         // Player Resources Display
-        string resourcesString = "";
         // Obtain local player
         GameObject playerObject = GameManager.Instance.GetLocalPlayer();
         if (playerObject != null)
@@ -43,33 +46,47 @@ public class GUIManager : MonoBehaviour
             if (player != null)
             {
                 // Text
-                inspectionText.gameObject.SetActive(true);
-                playerResourcesText.gameObject.SetActive(true);
-                rollText.gameObject.SetActive(true);
-                playerStateText.gameObject.SetActive(true);
+                if (!inspectionText.IsActive()) { inspectionText.gameObject.SetActive(true); };
+
+                // Resource Display
+                if (!lumberText.IsActive()) { lumberText.gameObject.SetActive(true); };
+                if (!brickText.IsActive()) { brickText.gameObject.SetActive(true); };
+                if (!woolText.IsActive()) { woolText.gameObject.SetActive(true); };
+                if (!grainText.IsActive()) { grainText.gameObject.SetActive(true); };
+                if (!oreText.IsActive()) { oreText.gameObject.SetActive(true); };
+
+                // Most recent roll
+                if (!rollText.IsActive()) { rollText.gameObject.SetActive(true); };
 
                 // Player action buttons - Only shown when it is the local player's turn
                 if (GameManager.Instance.IsPlayerTurn(player))
                 {
-                    diceRollButton.gameObject.SetActive(false);
-                    endPhaseButton.gameObject.SetActive(false);
-                    endTurnButton.gameObject.SetActive(false);
                     switch (player.state)
                     {
                         case PlayerState.SETUP:
-                            endTurnButton.gameObject.SetActive(true);
+                            diceRollButton.gameObject.SetActive(false);
+                            endPhaseButton.gameObject.SetActive(false);
+                            if (!endTurnButton.IsActive()) { endTurnButton.gameObject.SetActive(true); };
                             break;
                         case PlayerState.ROLLING:
-                            diceRollButton.gameObject.SetActive(true);
+                            endPhaseButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(false);
+                            if (!diceRollButton.IsActive()) { diceRollButton.gameObject.SetActive(true); };
                             break;
                         case PlayerState.ROBBING:
-                            endPhaseButton.gameObject.SetActive(true);
+                            diceRollButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(false);
+                            if (!endPhaseButton.IsActive()) { endPhaseButton.gameObject.SetActive(true); };
                             break;
                         case PlayerState.BUILDING:
-                            endTurnButton.gameObject.SetActive(true);
+                            diceRollButton.gameObject.SetActive(false);
+                            endPhaseButton.gameObject.SetActive(false);
+                            if (!endTurnButton.IsActive()) { endTurnButton.gameObject.SetActive(true); };
                             break;
                         case PlayerState.TRADING:
-                            endPhaseButton.gameObject.SetActive(true);
+                            diceRollButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(false);
+                            if (!endPhaseButton.IsActive()) { endPhaseButton.gameObject.SetActive(true); };
                             break;
                     }
                 } else
@@ -84,32 +101,24 @@ public class GUIManager : MonoBehaviour
                 int grain = player.GetResourceCount(ResourceType.Grain);
                 int ore = player.GetResourceCount(ResourceType.Ore);
 
-                resourcesString += "Free Roads: " + player.freeRoads + "\n";
-                resourcesString += "Free Settlements: " + player.freeSettlements + "\n\n";
-
-                resourcesString += "Lumber: " + lumber + "\n";
-                resourcesString += "Wool: " + wool + "\n";
-                resourcesString += "Brick: " + brick + "\n";
-                resourcesString += "Grain: " + grain + "\n";
-                resourcesString += "Ore: " + ore + "\n";
-
-                playerResourcesText.text = resourcesString;
-
-                if (GameManager.Instance.IsPlayerTurn(player))
-                {
-                    playerStateText.text = player.state.ToString();
-                } else
-                {
-                    playerStateText.text = "";
-                }
+                lumberText.text = lumber+"";
+                woolText.text = wool + "";
+                brickText.text = brick + "";
+                grainText.text = grain + "";
+                oreText.text = ore + "";
             }
         }
         else
         {
             inspectionText.gameObject.SetActive(false);
-            playerResourcesText.gameObject.SetActive(false);
+
+            lumberText.gameObject.SetActive(false);
+            brickText.gameObject.SetActive(false);
+            woolText.gameObject.SetActive(false);
+            grainText.gameObject.SetActive(false);
+            oreText.gameObject.SetActive(false);
+
             rollText.gameObject.SetActive(false);
-            playerStateText.gameObject.SetActive(false);
 
             endTurnButton.gameObject.SetActive(false);
             endPhaseButton.gameObject.SetActive(false);
