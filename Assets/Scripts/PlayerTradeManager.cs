@@ -13,6 +13,11 @@ public class PlayerTradeManager : NetworkBehaviour
     public bool trading = false;
 
     [SyncVar]
+    public bool requesterAccept = false;
+    [SyncVar]
+    public bool offererAccept = false;
+
+    [SyncVar]
     public string requesterId = "";
     [SyncVar]
     public int requestLumber = 0;
@@ -38,4 +43,18 @@ public class PlayerTradeManager : NetworkBehaviour
     [SyncVar]
     public int offerOre = 0;
 
+    public void MakeTradeOffer(string offererId, int lumber, int wool, int grain, int brick, int ore)
+    {
+        this.offererId = offererId;
+        this.offerLumber = lumber;
+        this.offerWool = wool;
+        this.offerGrain = grain;
+        this.offerBrick = brick;
+        this.offerOre = ore;
+    }
+
+    public void AcceptOffer()
+    {
+
+    }
 }
