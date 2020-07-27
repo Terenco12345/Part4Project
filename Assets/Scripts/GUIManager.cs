@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,9 @@ public class GUIManager : MonoBehaviour
     public Button diceRollButton;
 
     public NotificationTextBehaviour notificationText;
+
+    public GameObject freeSettlementNotification;
+    public GameObject freeRoadNotification;
 
     // Start is called before the first frame update
     void Start()
@@ -88,6 +92,36 @@ public class GUIManager : MonoBehaviour
                             endTurnButton.gameObject.SetActive(false);
                             if (!endPhaseButton.IsActive()) { endPhaseButton.gameObject.SetActive(true); };
                             break;
+                    }
+
+                    // Notify the player if they have free settlements or roads
+                    if (player.freeRoads >= 1)
+                    {
+                        if (!freeRoadNotification.activeSelf)
+                        {
+                            freeRoadNotification.SetActive(true);
+                        }
+                    } else
+                    {
+                        if (freeRoadNotification.activeSelf)
+                        {
+                            freeRoadNotification.SetActive(false);
+                        }
+                    }
+
+                    if (player.freeSettlements >= 1)
+                    {
+                        if (!freeSettlementNotification.activeSelf)
+                        {
+                            freeSettlementNotification.SetActive(true);
+                        }
+                    }
+                    else
+                    {
+                        if (freeSettlementNotification.activeSelf)
+                        {
+                            freeSettlementNotification.SetActive(false);
+                        }
                     }
                 } else
                 {
