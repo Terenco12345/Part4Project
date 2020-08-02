@@ -17,6 +17,15 @@ using Mirror;
  */
 public class PlayerTradeManager : NetworkBehaviour
 {
+    public static PlayerTradeManager Instance { get; private set; }
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+
     [SyncVar]
     public bool trading = false; // This flag is enabled if there is a trade in progress.
 
@@ -96,6 +105,103 @@ public class PlayerTradeManager : NetworkBehaviour
     public void UnAcceptAsOfferer()
     {
         this.offererAccept = false;
+    }
+
+    /**
+     * Increase or decrease a resource by a certain amount.
+     */
+    public void ChangeTradeAmount(string playerId, int resourceType, int amount)
+    {
+        Player player = GameManager.Instance.GetPlayerById(playerId);
+
+        // Check if player is offerer or receiver
+        if (playerId.Equals(receiverId))
+        {
+            // This player is the receiver. Add resource based on type, and if the transaction is possible.
+            switch((ResourceType)resourceType)
+            {
+                case ResourceType.Lumber:
+                    if(receiverLumber + amount <= player.GetResourceCount((ResourceType)resourceType) 
+                        && receiverLumber + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        receiverLumber += amount;
+                    }
+                    break;
+                case ResourceType.Wool:
+                    if (receiverWool + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && receiverWool + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        receiverWool += amount;
+                    }
+                    break;
+                case ResourceType.Grain:
+                    if (receiverGrain + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && receiverGrain + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        receiverGrain += amount;
+                    }
+                    break;
+                case ResourceType.Brick:
+                    if (receiverBrick + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && receiverBrick + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        receiverBrick += amount;
+                    }
+                    break;
+                case ResourceType.Ore:
+                    if (receiverOre + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && receiverOre + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        receiverOre += amount;
+                    }
+                    break;
+            }
+        } else if (playerId.Equals(offererId))
+        {
+            // This player is the offerer. Add resource based on type, and if the transaction is possible.
+            switch ((ResourceType)resourceType)
+            {
+                case ResourceType.Lumber:
+                    if (offererLumber + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && offererLumber + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        offererLumber += amount;
+                    }
+                    break;
+                case ResourceType.Wool:
+                    if (offererWool + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && receiverWool + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        receiverWool += amount;
+                    }
+                    break;
+                case ResourceType.Grain:
+                    if (offererGrain + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && offererGrain + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        offererGrain += amount;
+                    }
+                    break;
+                case ResourceType.Brick:
+                    if (offererBrick + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && offererBrick + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        offererBrick += amount;
+                    }
+                    break;
+                case ResourceType.Ore:
+                    if (offererOre + amount <= player.GetResourceCount((ResourceType)resourceType)
+                        && offererOre + amount >= player.GetResourceCount((ResourceType)resourceType))
+                    {
+                        offererOre += amount;
+                    }
+                    break;
+            }
+
+        } else
+        {
+            // This player is not authorized to make a trade. Do nothing.
+        }
     }
 
     /**
