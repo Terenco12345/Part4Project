@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
 /**
  * This class has commands which perform player actions.
@@ -222,4 +223,18 @@ public class PlayerController : NetworkBehaviour
         GameManager.Instance.SetDirtyBit(0b11111111);
     }
 
+    [Command]
+    public void CmdRobPlayer(string playerId)
+    {
+        Player targetPlayer = GameManager.Instance.GetPlayerById(playerId);
+        int resourceIndex = UnityEngine.Random.Range(0, targetPlayer.resources.Count);
+
+        // Steal the resource
+        ResourceType resource = targetPlayer.resources[resourceIndex];
+        targetPlayer.resources.RemoveAt(resourceIndex);
+        playerBehaviour.GetPlayer().resources.Add(resource);
+        playerBehaviour.GetPlayer().state = PlayerState.BUILDING;
+
+        GameManager.Instance.SetDirtyBit(0b11111111);
+    }
 }

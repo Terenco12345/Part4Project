@@ -26,6 +26,8 @@ public class GUIManager : MonoBehaviour
     public GameObject freeSettlementNotification;
     public GameObject freeRoadNotification;
 
+    public GameObject tradeWindow;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +51,20 @@ public class GUIManager : MonoBehaviour
 
             if (player != null)
             {
+                // Render the trade window if this local player is in a trade.
+                if (PlayerTradeManager.Instance.trading 
+                    && (PlayerTradeManager.Instance.receiverId.Equals(player.GetId()) || PlayerTradeManager.Instance.offererId.Equals(player.GetId())))
+                {
+                    if (!tradeWindow.activeSelf) {
+                        tradeWindow.GetComponent<TradeWindowRenderer>().topPlayerTradeDisplay.confirmCheckbox.GetComponent<Toggle>().isOn = false;
+                        tradeWindow.GetComponent<TradeWindowRenderer>().bottomPlayerTradeDisplay.confirmCheckbox.GetComponent<Toggle>().isOn = false;
+                        tradeWindow.SetActive(true); 
+                    };
+                } else
+                {
+                    if (tradeWindow.activeSelf) { tradeWindow.SetActive(false); };
+                }
+
                 // Text
                 if (!inspectionText.IsActive()) { inspectionText.gameObject.SetActive(true); };
 
@@ -61,6 +77,19 @@ public class GUIManager : MonoBehaviour
 
                 // Most recent roll
                 if (!rollText.IsActive()) { rollText.gameObject.SetActive(true); };
+
+                // Update the resource counters
+                int lumber = player.GetResourceCount(ResourceType.Lumber);
+                int wool = player.GetResourceCount(ResourceType.Wool);
+                int brick = player.GetResourceCount(ResourceType.Brick);
+                int grain = player.GetResourceCount(ResourceType.Grain);
+                int ore = player.GetResourceCount(ResourceType.Ore);
+
+                lumberText.text = lumber + "";
+                woolText.text = wool + "";
+                brickText.text = brick + "";
+                grainText.text = grain + "";
+                oreText.text = ore + "";
 
                 // Player action buttons - Only shown when it is the local player's turn
                 if (GameManager.Instance.IsPlayerTurn(player))
@@ -80,7 +109,7 @@ public class GUIManager : MonoBehaviour
                         case PlayerState.ROBBING:
                             diceRollButton.gameObject.SetActive(false);
                             endTurnButton.gameObject.SetActive(false);
-                            if (!endPhaseButton.IsActive()) { endPhaseButton.gameObject.SetActive(true); };
+                            endPhaseButton.gameObject.SetActive(false);
                             break;
                         case PlayerState.BUILDING:
                             diceRollButton.gameObject.SetActive(false);
@@ -128,18 +157,6 @@ public class GUIManager : MonoBehaviour
                     endTurnButton.gameObject.SetActive(false);
                     diceRollButton.gameObject.SetActive(false);
                 }
-
-                int lumber = player.GetResourceCount(ResourceType.Lumber);
-                int wool = player.GetResourceCount(ResourceType.Wool);
-                int brick = player.GetResourceCount(ResourceType.Brick);
-                int grain = player.GetResourceCount(ResourceType.Grain);
-                int ore = player.GetResourceCount(ResourceType.Ore);
-
-                lumberText.text = lumber+"";
-                woolText.text = wool + "";
-                brickText.text = brick + "";
-                grainText.text = grain + "";
-                oreText.text = ore + "";
             }
         }
         else

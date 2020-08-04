@@ -35,11 +35,6 @@ public class PlayerTradeManager : NetworkBehaviour
     public bool offererAccept = false;
 
     [SyncVar]
-    public bool receiverWantsToTrade = false;
-    [SyncVar]
-    public bool offererWantsToTrade = false;
-
-    [SyncVar]
     public string receiverId = "";
     [SyncVar]
     public int receiverLumber = 0;
@@ -122,35 +117,35 @@ public class PlayerTradeManager : NetworkBehaviour
             {
                 case ResourceType.Lumber:
                     if(receiverLumber + amount <= player.GetResourceCount((ResourceType)resourceType) 
-                        && receiverLumber + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && receiverLumber + amount >= 0)
                     {
                         receiverLumber += amount;
                     }
                     break;
                 case ResourceType.Wool:
                     if (receiverWool + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && receiverWool + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && receiverWool + amount >= 0)
                     {
                         receiverWool += amount;
                     }
                     break;
                 case ResourceType.Grain:
                     if (receiverGrain + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && receiverGrain + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && receiverGrain + amount >= 0)
                     {
                         receiverGrain += amount;
                     }
                     break;
                 case ResourceType.Brick:
                     if (receiverBrick + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && receiverBrick + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && receiverBrick + amount >= 0)
                     {
                         receiverBrick += amount;
                     }
                     break;
                 case ResourceType.Ore:
                     if (receiverOre + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && receiverOre + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && receiverOre + amount >= 0)
                     {
                         receiverOre += amount;
                     }
@@ -163,35 +158,35 @@ public class PlayerTradeManager : NetworkBehaviour
             {
                 case ResourceType.Lumber:
                     if (offererLumber + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && offererLumber + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && offererLumber + amount >= 0)
                     {
                         offererLumber += amount;
                     }
                     break;
                 case ResourceType.Wool:
                     if (offererWool + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && receiverWool + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && offererWool + amount >= 0)
                     {
-                        receiverWool += amount;
+                        offererWool += amount;
                     }
                     break;
                 case ResourceType.Grain:
                     if (offererGrain + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && offererGrain + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && offererGrain + amount >= 0)
                     {
                         offererGrain += amount;
                     }
                     break;
                 case ResourceType.Brick:
                     if (offererBrick + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && offererBrick + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && offererBrick + amount >= 0)
                     {
                         offererBrick += amount;
                     }
                     break;
                 case ResourceType.Ore:
                     if (offererOre + amount <= player.GetResourceCount((ResourceType)resourceType)
-                        && offererOre + amount >= player.GetResourceCount((ResourceType)resourceType))
+                        && offererOre + amount >= 0)
                     {
                         offererOre += amount;
                     }
@@ -211,9 +206,6 @@ public class PlayerTradeManager : NetworkBehaviour
     {
         this.receiverAccept = false;
         this.offererAccept = false;
-
-        this.receiverWantsToTrade = false;
-        this.offererWantsToTrade = false;
     }
 
     public void ResetTrade()
@@ -222,9 +214,6 @@ public class PlayerTradeManager : NetworkBehaviour
 
         this.receiverAccept = false;
         this.offererAccept = false;
-
-        this.receiverWantsToTrade = false;
-        this.offererWantsToTrade = false;
 
         this.receiverId = "";
         this.receiverBrick = 0;
@@ -246,13 +235,13 @@ public class PlayerTradeManager : NetworkBehaviour
         return offererId.Equals(id) && trading;
     }
 
-    public bool isPlayerReceiving(string id)
+    public bool IsPlayerReceiving(string id)
     {
         return receiverId.Equals(id) && trading;
     }
 
     public bool ShouldTradeResolve()
     {
-        return receiverAccept && offererAccept && receiverWantsToTrade && offererWantsToTrade;
+        return receiverAccept && offererAccept;
     }
 }

@@ -58,7 +58,7 @@ public class PlayerBehaviour : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isLocalPlayer)
+        if (isLocalPlayer && player != null && (player.state == PlayerState.BUILDING || player.state == PlayerState.SETUP))
         {
             Ray ray = GameManager.Instance.mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
