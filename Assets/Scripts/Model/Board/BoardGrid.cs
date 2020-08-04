@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Mirror;
 
 /**
@@ -110,6 +111,25 @@ public class BoardGrid
     public Edge GetEdge(int col, int row, EdgeSpecifier edgeSpec)
     {
         return gridEdges[col, row, (int)edgeSpec];
+    }
+
+    public int[] GetEdgeCoordinates(Edge edge)
+    {
+        for (int col = 0; col < gridEdges.GetLength(0); col++) 
+        { 
+            for(int row = 0; row < gridEdges.GetLength(1); row++) 
+            {
+                for(int edgeSpec = 0; edgeSpec < gridEdges.GetLength(2); edgeSpec++)
+                {
+                    if(gridEdges[col, row, edgeSpec] == edge)
+                    {
+                        return new int[] { col, row, edgeSpec };
+                    }    
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -332,6 +352,37 @@ public class BoardGrid
     }
 
     /**
+     * Return a vertex that is between two edges, if the edges are adjacent.
+     */
+    public Vertex GetVertexBetweenTwoConnectedEdges(int col, int row, EdgeSpecifier edgeSpecifier, int col2, int row2, EdgeSpecifier edgeSpecifier2)
+    {
+        Edge edge2 = gridEdges[col2, row2, (int)edgeSpecifier2];
+
+        switch (edgeSpecifier)
+        {
+            case EdgeSpecifier.W:
+                if (gridEdges[col - 1, row, (int)EdgeSpecifier.N] == edge2) { return gridVertices[col, row, (int)VertexSpecifier.L]; } // Upper Left
+                if (gridEdges[col - 1, row, (int)EdgeSpecifier.E] == edge2) { return gridVertices[col, row, (int)VertexSpecifier.L]; } // Lower Left
+                if (gridEdges[col - 1, row + 1, (int)EdgeSpecifier.E] == edge2) { return gridVertices[col-1, row+1, (int)VertexSpecifier.R]; } // Upper Right
+                if (gridEdges[col, row, (int)EdgeSpecifier.N] == edge2) { return gridVertices[col - 1, row + 1, (int)VertexSpecifier.R]; } // Lower Right
+                break;
+            case EdgeSpecifier.N:
+                if (gridEdges[col - 1, row + 1, (int)EdgeSpecifier.E] == edge2) { return gridVertices[col - 1, row + 1, (int)VertexSpecifier.R]; } // Upper Left
+                if (gridEdges[col, row, (int)EdgeSpecifier.W] == edge2) { return gridVertices[col - 1, row + 1, (int)VertexSpecifier.R]; } // Lower Left
+                if (gridEdges[col + 1, row, (int)EdgeSpecifier.W] == edge2) { return gridVertices[col + 1, row, (int)VertexSpecifier.L]; } // Upper Right
+                if (gridEdges[col, row, (int)EdgeSpecifier.E] == edge2) { return gridVertices[col + 1, row, (int)VertexSpecifier.L]; } // Lower Right
+                break;
+            case EdgeSpecifier.E:
+                if (gridEdges[col + 1, row, (int)EdgeSpecifier.W] == edge2) { return gridVertices[col + 1, row, (int)VertexSpecifier.L]; } // Upper Left
+                if (gridEdges[col, row, (int)EdgeSpecifier.N] == edge2) { return gridVertices[col + 1, row, (int)VertexSpecifier.L]; } // Lower Left
+                if (gridEdges[col + 1, row - 1, (int)EdgeSpecifier.N] == edge2) { return gridVertices[col, row, (int)VertexSpecifier.R]; } // Upper Right
+                if (gridEdges[col + 1, row - 1, (int)EdgeSpecifier.W] == edge2) { return gridVertices[col, row, (int)VertexSpecifier.R]; } // Lower Right
+                break;
+        }
+        return null;
+    }
+
+    /**
      * Get all edges connected to an edge.
      * - This will be used to calculate validity of placement of roads.
      */
@@ -385,6 +436,24 @@ public class BoardGrid
                 break;
         }
         return vertices;
+    }
+
+    public int[] GetVertexPosition(Vertex vertex)
+    {
+        for(int col = 0; col < gridVertices.GetLength(0); col++)
+        {
+            for(int row = 0; row < gridVertices.GetLength(1); row++)
+            {
+                for(int spec = 0; spec < gridVertices.GetLength(2); spec++)
+                {
+                    if(gridVertices[col, row, spec] == vertex)
+                    {
+                        return new int[] { col, row, spec };
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public bool Equals(BoardGrid other)

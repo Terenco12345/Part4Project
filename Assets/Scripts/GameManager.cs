@@ -16,6 +16,7 @@ public class GameManager : NetworkBehaviour
 
     public Game game = new Game();
     public GameObject localPlayer = null;
+
     public int recentRoll = 0;
     public int turnIndex = 0;
     public int turnCount = 0;
@@ -50,6 +51,11 @@ public class GameManager : NetworkBehaviour
         this.game = game;
     }
 
+    public int GetTurnCycle()
+    {
+        return (turnCount/ game.players.Count)+1;
+    }
+
     /**
      * Obtains next number in the cycle of turns. E.g. If player 3 ends their turn, 
      * player 4 would go next if there are 4 or more players, or return to player 1 otherwise.
@@ -81,7 +87,19 @@ public class GameManager : NetworkBehaviour
      */
     public bool IsPlayerTurn(Player player)
     {
-        return GetGame().GetPlayerIndexById(player.GetId()) == turnIndex;
+        if (GetGame().players.Contains(player))
+        {
+            if (GetTurnCycle() == 2)
+            {
+                return GetGame().GetPlayerIndexById(player.GetId()) == GetGame().players.Count - 1 - (turnIndex);
+
+            }
+            else
+            {
+                return GetGame().GetPlayerIndexById(player.GetId()) == turnIndex;
+            }
+        }
+        return false;
     }
 
     /**

@@ -21,7 +21,7 @@ public class Player
     {
         this.id = id;
 
-        state = PlayerState.ROLLING;
+        state = PlayerState.SETUP;
 
         storeSettlementNum = 5;
         storeCityNum = 5;

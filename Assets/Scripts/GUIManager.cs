@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,20 +8,25 @@ public class GUIManager : MonoBehaviour
 {
     public bool devMode = false;
 
-    public Text inspectionText;
-    public Text playerResourcesText;
-    public Text rollText;
-    public Text playerStateText;
+    public Text lumberText;
+    public Text brickText;
+    public Text woolText;
+    public Text grainText;
+    public Text oreText;
 
-    
-    public Button devResourceButton;
-    public Button giveFreeSettlementsAndRoadsButton;
+    public Text inspectionText;
+    public Text rollText;
 
     public Button endTurnButton;
     public Button endPhaseButton;
     public Button diceRollButton;
 
     public NotificationTextBehaviour notificationText;
+
+    public GameObject freeSettlementNotification;
+    public GameObject freeRoadNotification;
+
+    public GameObject tradeWindow;
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +43,6 @@ public class GUIManager : MonoBehaviour
         }
 
         // Player Resources Display
-        string resourcesString = "";
         // Obtain local player
         GameObject playerObject = GameManager.Instance.GetLocalPlayer();
         if (playerObject != null)
@@ -46,92 +51,130 @@ public class GUIManager : MonoBehaviour
 
             if (player != null)
             {
+                // Render the trade window if this local player is in a trade.
+                if (PlayerTradeManager.Instance.trading 
+                    && (PlayerTradeManager.Instance.receiverId.Equals(player.GetId()) || PlayerTradeManager.Instance.offererId.Equals(player.GetId())))
+                {
+                    if (!tradeWindow.activeSelf) {
+                        tradeWindow.GetComponent<TradeWindowRenderer>().topPlayerTradeDisplay.confirmCheckbox.GetComponent<Toggle>().isOn = false;
+                        tradeWindow.GetComponent<TradeWindowRenderer>().bottomPlayerTradeDisplay.confirmCheckbox.GetComponent<Toggle>().isOn = false;
+                        tradeWindow.SetActive(true); 
+                    };
+                } else
+                {
+                    if (tradeWindow.activeSelf) { tradeWindow.SetActive(false); };
+                }
+
                 // Text
-                inspectionText.gameObject.SetActive(true);
-                playerResourcesText.gameObject.SetActive(true);
-                rollText.gameObject.SetActive(true);
-                playerStateText.gameObject.SetActive(true);
+                if (!inspectionText.IsActive()) { inspectionText.gameObject.SetActive(true); };
 
-                // Dev buttons
-                if (devMode)
-                {
-                    devResourceButton.gameObject.SetActive(true);
-                    giveFreeSettlementsAndRoadsButton.gameObject.SetActive(true);
-                } else
-                {
-                    devResourceButton.gameObject.SetActive(false);
-                    giveFreeSettlementsAndRoadsButton.gameObject.SetActive(false);
-                }
+                // Resource Display
+                if (!lumberText.IsActive()) { lumberText.gameObject.SetActive(true); };
+                if (!brickText.IsActive()) { brickText.gameObject.SetActive(true); };
+                if (!woolText.IsActive()) { woolText.gameObject.SetActive(true); };
+                if (!grainText.IsActive()) { grainText.gameObject.SetActive(true); };
+                if (!oreText.IsActive()) { oreText.gameObject.SetActive(true); };
 
-                // Player action buttons - Only shown when it is the local player's turn
-                if (GameManager.Instance.IsPlayerTurn(player))
-                {
-                    diceRollButton.gameObject.SetActive(false);
-                    endPhaseButton.gameObject.SetActive(false);
-                    endTurnButton.gameObject.SetActive(false);
-                    switch (player.state)
-                    {
-                        case PlayerState.SETUP:
-                            endTurnButton.gameObject.SetActive(true);
-                            break;
-                        case PlayerState.ROLLING:
-                            diceRollButton.gameObject.SetActive(true);
-                            break;
-                        case PlayerState.ROBBING:
-                            endPhaseButton.gameObject.SetActive(true);
-                            break;
-                        case PlayerState.BUILDING:
-                            endTurnButton.gameObject.SetActive(true);
-                            break;
-                        case PlayerState.TRADING:
-                            endPhaseButton.gameObject.SetActive(true);
-                            break;
-                    }
-                } else
-                {
-                    endTurnButton.gameObject.SetActive(false);
-                    diceRollButton.gameObject.SetActive(false);
-                }
+                // Most recent roll
+                if (!rollText.IsActive()) { rollText.gameObject.SetActive(true); };
 
+                // Update the resource counters
                 int lumber = player.GetResourceCount(ResourceType.Lumber);
                 int wool = player.GetResourceCount(ResourceType.Wool);
                 int brick = player.GetResourceCount(ResourceType.Brick);
                 int grain = player.GetResourceCount(ResourceType.Grain);
                 int ore = player.GetResourceCount(ResourceType.Ore);
 
-                resourcesString += "Free Roads: " + player.freeRoads + "\n";
-                resourcesString += "Free Settlements: " + player.freeSettlements + "\n\n";
+                lumberText.text = lumber + "";
+                woolText.text = wool + "";
+                brickText.text = brick + "";
+                grainText.text = grain + "";
+                oreText.text = ore + "";
 
-                resourcesString += "Lumber: " + lumber + "\n";
-                resourcesString += "Wool: " + wool + "\n";
-                resourcesString += "Brick: " + brick + "\n";
-                resourcesString += "Grain: " + grain + "\n";
-                resourcesString += "Ore: " + ore + "\n";
-
-                playerResourcesText.text = resourcesString;
-
+                // Player action buttons - Only shown when it is the local player's turn
                 if (GameManager.Instance.IsPlayerTurn(player))
                 {
-                    playerStateText.text = player.state.ToString();
+                    switch (player.state)
+                    {
+                        case PlayerState.SETUP:
+                            diceRollButton.gameObject.SetActive(false);
+                            endPhaseButton.gameObject.SetActive(false);
+                            if (!endTurnButton.IsActive()) { endTurnButton.gameObject.SetActive(true); };
+                            break;
+                        case PlayerState.ROLLING:
+                            endPhaseButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(false);
+                            if (!diceRollButton.IsActive()) { diceRollButton.gameObject.SetActive(true); };
+                            break;
+                        case PlayerState.ROBBING:
+                            diceRollButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(false);
+                            endPhaseButton.gameObject.SetActive(false);
+                            break;
+                        case PlayerState.BUILDING:
+                            diceRollButton.gameObject.SetActive(false);
+                            endPhaseButton.gameObject.SetActive(false);
+                            if (!endTurnButton.IsActive()) { endTurnButton.gameObject.SetActive(true); };
+                            break;
+                        case PlayerState.TRADING:
+                            diceRollButton.gameObject.SetActive(false);
+                            endTurnButton.gameObject.SetActive(false);
+                            if (!endPhaseButton.IsActive()) { endPhaseButton.gameObject.SetActive(true); };
+                            break;
+                    }
+
+                    // Notify the player if they have free settlements or roads
+                    if (player.freeRoads >= 1)
+                    {
+                        if (!freeRoadNotification.activeSelf)
+                        {
+                            freeRoadNotification.SetActive(true);
+                        }
+                    } else
+                    {
+                        if (freeRoadNotification.activeSelf)
+                        {
+                            freeRoadNotification.SetActive(false);
+                        }
+                    }
+
+                    if (player.freeSettlements >= 1)
+                    {
+                        if (!freeSettlementNotification.activeSelf)
+                        {
+                            freeSettlementNotification.SetActive(true);
+                        }
+                    }
+                    else
+                    {
+                        if (freeSettlementNotification.activeSelf)
+                        {
+                            freeSettlementNotification.SetActive(false);
+                        }
+                    }
                 } else
                 {
-                    playerStateText.text = "";
+                    endTurnButton.gameObject.SetActive(false);
+                    diceRollButton.gameObject.SetActive(false);
                 }
             }
         }
         else
         {
             inspectionText.gameObject.SetActive(false);
-            playerResourcesText.gameObject.SetActive(false);
+
+            lumberText.gameObject.SetActive(false);
+            brickText.gameObject.SetActive(false);
+            woolText.gameObject.SetActive(false);
+            grainText.gameObject.SetActive(false);
+            oreText.gameObject.SetActive(false);
+
             rollText.gameObject.SetActive(false);
-            playerStateText.gameObject.SetActive(false);
 
             endTurnButton.gameObject.SetActive(false);
             endPhaseButton.gameObject.SetActive(false);
 
             diceRollButton.gameObject.SetActive(false);
-            devResourceButton.gameObject.SetActive(false);
-            giveFreeSettlementsAndRoadsButton.gameObject.SetActive(false);
         }
 
         if (GameManager.Instance.recentRoll == 0)
