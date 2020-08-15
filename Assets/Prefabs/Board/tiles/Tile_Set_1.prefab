@@ -9,13 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7378002088869445189}
-  - component: {fileID: 2415614348550618290}
-  - component: {fileID: 2600899281227992098}
   - component: {fileID: -5055973986181556091}
   - component: {fileID: -2722681208287305406}
   - component: {fileID: 6804145114528772514}
+  - component: {fileID: -9182428261478535594}
   m_Layer: 0
-  m_Name: Tile
+  m_Name: Tile_Set_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,53 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
---- !u!33 &2415614348550618290
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3683952389361237915}
-  m_Mesh: {fileID: 5062246478642505140, guid: 1229b3d3fad252449b86d9622d6af211, type: 3}
---- !u!23 &2600899281227992098
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3683952389361237915}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
 --- !u!64 &-5055973986181556091
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -110,15 +62,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   col: 0
   row: 0
-  noneMaterial: {fileID: 2100000, guid: b4cb9bc1a4029434f9621db5729a5b4a, type: 2}
-  forestMaterial: {fileID: 2100000, guid: 6df5e878ed9604343bd9334e26a16181, type: 2}
-  hillMaterial: {fileID: 2100000, guid: eb33f74b6952b4142b919e4d5849ada5, type: 2}
-  meadowMaterial: {fileID: 2100000, guid: 22cc5dda76c5e7f4d901c690efe5e2df, type: 2}
-  mountainMaterial: {fileID: 2100000, guid: f24a921bd6ec43546a600f7d8851a24b, type: 2}
-  fieldMaterial: {fileID: 2100000, guid: 60dc8367738ddb241a436538ee0f57f1, type: 2}
-  desertMaterial: {fileID: 2100000, guid: 255bdfafa444049489a9dc8834a8104c, type: 2}
+  noneTile: {fileID: 4123665463725482103, guid: 71e3d47d8c2436648a65c600328f886a,
+    type: 3}
+  forestTile: {fileID: 8656935953669955215, guid: f2379045735593b4db5a38a4b0134d12,
+    type: 3}
+  hillTile: {fileID: 6270243900695530822, guid: 0287f71e03e89774eb4aba88508cf410,
+    type: 3}
+  meadowTile: {fileID: 2670526750694612633, guid: 65354005102d51f4091b3c5b270d115e,
+    type: 3}
+  mountainTile: {fileID: 5815243152081093819, guid: 2cb2d5c338e064f48a9e8e0e2c497e0e,
+    type: 3}
+  fieldTile: {fileID: 975444107211481320, guid: 1705b95c47958de4e9df786e117123a9,
+    type: 3}
+  desertTile: {fileID: 4783308439796289750, guid: 02301a2c24068fc458d4b5eb647caa8a,
+    type: 3}
   chanceTokenPrefab: {fileID: 7881650181230994622, guid: 17560b2bb575afa4eaa178e4facbd534,
     type: 3}
+  tileResourceType: 0
 --- !u!114 &6804145114528772514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,3 +92,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inspectionText: 
+--- !u!64 &-9182428261478535594
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3683952389361237915}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5062246478642505140, guid: 1229b3d3fad252449b86d9622d6af211, type: 3}
