@@ -7,20 +7,46 @@ public class TileRenderer : MonoBehaviour
     public int col;
     public int row;
 
-    public Material noneMaterial;
-    public Material forestMaterial;
-    public Material hillMaterial;
-    public Material meadowMaterial;
-    public Material mountainMaterial;
-    public Material fieldMaterial;
-    public Material desertMaterial;
+    public GameObject noneTile;
+    public GameObject forestTile;
+    public GameObject hillTile;
+    public GameObject meadowTile;
+    public GameObject mountainTile;
+    public GameObject fieldTile;
+    public GameObject desertTile;
 
     public GameObject chanceTokenPrefab;
     GameObject chanceToken = null;
 
+    public ResourceType tileResourceType;
+    private ResourceType previousResourceType;
+    GameObject tileObject;
+
     public void Start()
     {
+        tileResourceType = ResourceType.None;
+        previousResourceType = ResourceType.None;
+    }
 
+    public void Update()
+    {
+        Face face = FindObjectOfType<GameManager>().GetGame().GetBoardHandler().GetBoardGrid().GetFace(col, row);
+        
+        // Check if face.tile.resourceType has changed
+        if (face.tile != null)
+        {
+            tileResourceType = face.tile.resourceType;
+        } else
+        {
+            tileResourceType = ResourceType.None;
+        }
+
+        if (tileResourceType != previousResourceType)
+        {
+            UpdateTileObject();
+        }
+
+        previousResourceType = tileResourceType;
     }
 
     public void LateUpdate()
@@ -28,34 +54,6 @@ public class TileRenderer : MonoBehaviour
         Face face = FindObjectOfType<GameManager>().GetGame().GetBoardHandler().GetBoardGrid().GetFace(col, row);
         if(face.tile != null)
         {
-            // Change material to match the resource type of this tile
-            Material currentMaterial = noneMaterial;
-            switch (face.tile.resourceType)
-            {
-                case ResourceType.None:
-                    currentMaterial = noneMaterial;
-                    break;
-                case ResourceType.Lumber:
-                    currentMaterial = forestMaterial;
-                    break;
-                case ResourceType.Brick:
-                    currentMaterial = hillMaterial;
-                    break;
-                case ResourceType.Wool:
-                    currentMaterial = meadowMaterial;
-                    break;
-                case ResourceType.Ore:
-                    currentMaterial = mountainMaterial;
-                    break;
-                case ResourceType.Grain:
-                    currentMaterial = fieldMaterial;
-                    break;
-                case ResourceType.Desert:
-                    currentMaterial = desertMaterial;
-                    break;
-            }
-            GetComponent<MeshRenderer>().material = currentMaterial;
-
             // Instantiate a chance token for this tile
             if (face.tile.chanceValue == 0 || face.tile.resourceType == ResourceType.Desert) // If this token value is 0, there is no token tile
             {
@@ -73,12 +71,48 @@ public class TileRenderer : MonoBehaviour
                 }
                 chanceToken.GetComponent<ChanceTokenRenderer>().SetValue(face.tile.chanceValue);
             }
-        } else
-        {
-            GetComponent<MeshRenderer>().material = noneMaterial;
         }
 
         GetComponent<Inspectable>().inspectionText = GetInspectionText();
+    }
+
+    public void UpdateTileObject()
+    {
+        Face face = FindObjectOfType<GameManager>().GetGame().GetBoardHandler().GetBoardGrid().GetFace(col, row);
+
+        if (tileObject != null)
+        {
+            Destroy(tileObject);
+        }
+
+        // Change material to match the resource type of this tile
+        GameObject currentTile = noneTile;
+        switch (face.tile.resourceType)
+        {
+            case ResourceType.None:
+                currentTile = noneTile;
+                break;
+            case ResourceType.Lumber:
+                currentTile = forestTile;
+                break;
+            case ResourceType.Brick:
+                currentTile = hillTile;
+                break;
+            case ResourceType.Wool:
+                currentTile = meadowTile;
+                break;
+            case ResourceType.Ore:
+                currentTile = mountainTile;
+                break;
+            case ResourceType.Grain:
+                currentTile = fieldTile;
+                break;
+            case ResourceType.Desert:
+                currentTile = desertTile;
+                break;
+        }
+
+        tileObject = Instantiate(currentTile, transform);
     }
 
     public string GetInspectionText()

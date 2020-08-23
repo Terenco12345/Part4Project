@@ -15,9 +15,9 @@ public class BoardBehaviour : NetworkBehaviour
     float gridHeight = 4.82f;
     Vector3 startPosition = new Vector3(-4.82f * 6f, 0, 4.82f / 1.1547005f * -3);
 
-    GameObject[,] gridFaces;
-    GameObject[,,] gridVertices;
-    GameObject[,,] gridEdges;
+    public GameObject[,] gridFaces;
+    public GameObject[,,] gridVertices;
+    public GameObject[,,] gridEdges;
 
     void Start()
     {
