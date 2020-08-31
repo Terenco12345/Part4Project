@@ -1,21 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class VictoryPointManager : MonoBehaviour
+public class VictoryPointManager : NetworkBehaviour
 {
-    public void Start()
+    // Singleton
+    public static VictoryPointManager Instance { get; private set; }
+    private void Awake()
     {
-        
+        if (Instance == null)
+        {
+            Instance = this;
+        }
     }
+
+    [SyncVar]
+    public int victoryPointWinRequirement = 10;
+
+    [SyncVar]
+    public bool hasSomeoneWon = false;
+
+    [SyncVar]
+    public string winnerId = "";
 
     /**
      * Obtain the victory points for a player, given their ID.
      */
     public int GetVictoryPointsForPlayerId(string id)
     {
-        BoardGrid boardGrid = GetComponent<GameManager>().GetGame().GetBoardHandler().GetBoardGrid();
+        BoardGrid boardGrid = GameManager.Instance.GetGame().GetBoardHandler().GetBoardGrid();
         int victoryPoints = 0;
+        
+        // Building related victory points
         for(int col = 0; col < boardGrid.GetColCount(); col++)
         {
             for(int row = 0; row < boardGrid.GetRowCount(); row++)
@@ -41,6 +58,11 @@ public class VictoryPointManager : MonoBehaviour
                 }
             }
         }
+
+        // Longest Road related victory points
+
+        // Largest Army related victory points
+
         return victoryPoints;
     }
 }

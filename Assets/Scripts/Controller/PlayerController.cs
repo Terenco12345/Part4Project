@@ -118,6 +118,16 @@ public class PlayerController : NetworkBehaviour
         }
         nextPlayer.state = PlayerState.ROLLING;
 
+        // Check if the next player has won the game.
+        VictoryPointManager victoryPointManager = VictoryPointManager.Instance;
+
+        if (victoryPointManager.GetVictoryPointsForPlayerId(nextPlayer.GetId()) >= victoryPointManager.victoryPointWinRequirement)
+        {
+            Debug.Log("A player has won!");
+            victoryPointManager.hasSomeoneWon = true;
+            victoryPointManager.winnerId = nextPlayer.GetId();
+        }
+
         // If still within the first two turn cycles, give a free settlement and road to the next player
         if (GameManager.Instance.GetTurnCycle() <= 2)
         {
@@ -142,6 +152,12 @@ public class PlayerController : NetworkBehaviour
         if (roll == 7)
         {
             thisPlayer.state = PlayerState.ROBBING;
+
+            // If any players have 8 or more development cards, dump half their hands by random
+            foreach(Player player in GameManager.Instance.GetGame().players)
+            {
+                player.AttemptToDiscardHalfOfCards();
+            }
         }
         else
         {

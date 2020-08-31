@@ -7,9 +7,9 @@ public class PlayerCustomizationController : NetworkBehaviour
 {
     public PlayerBehaviour playerBehaviour;
     
-    [Command]
-    public void CmdChangeSelection(int selection)
+    public void ChangeSelection(int selection)
     {
         ModelManager.Instance.tileSetSelection = selection;
+        ModelManager.Instance.UpdateTiles();
     }
 }
