@@ -17,31 +17,15 @@ public class ModelManager : NetworkBehaviour
     public BoardBehaviour board;
     public List<TileRenderer> tileSets;
 
-    [SyncVar]
     public int tileSetSelection;
-    int previousTileSetSelection;
 
     // Start is called before the first frame update
     void Start()
     {
-        previousTileSetSelection = tileSetSelection;
+        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(board.gridFaces != null)
-        {
-            // Check if selection changed
-            if(tileSetSelection != previousTileSetSelection)
-            {
-                UpdateTiles();
-            }
-        }
-        previousTileSetSelection = tileSetSelection;
-    }
-
-    void UpdateTiles()
+    public void UpdateTiles()
     {
         foreach (GameObject tileObject in board.gridFaces)
         {
@@ -70,10 +54,10 @@ public class ModelManager : NetworkBehaviour
         PlayerCustomizationController playerCustomizationController = GameManager.Instance.GetLocalPlayer().GetComponent<PlayerCustomizationController>();
         if (tileSetSelection + 1 >= tileSets.Count)
         {
-            playerCustomizationController.CmdChangeSelection(0);
+            playerCustomizationController.ChangeSelection(0);
         } else
         {
-            playerCustomizationController.CmdChangeSelection(tileSetSelection + 1);
+            playerCustomizationController.ChangeSelection(tileSetSelection + 1);
         }
     }
 }

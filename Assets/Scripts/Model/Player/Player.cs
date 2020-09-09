@@ -163,4 +163,22 @@ public class Player
             return false;
         }
     }
+
+    /**
+     * This method is invoked when a player rolls a seven, and will apply to everyone who has >= 8 resources.
+     */
+    public void AttemptToDiscardHalfOfCards()
+    {
+        if(resources.Count >= 8)
+        {
+            int discardAmount = resources.Count / 2;
+
+            // Remove half of the cards
+            for(int i = 0; i < discardAmount; i++)
+            {
+                int resourceIndex = UnityEngine.Random.Range(0, resources.Count);
+                resources.RemoveAt(resourceIndex);
+            }
+        }
+    }
 }
