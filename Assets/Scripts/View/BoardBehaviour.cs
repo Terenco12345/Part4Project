@@ -5,8 +5,10 @@ using Mirror;
 
 public class BoardBehaviour : NetworkBehaviour
 {
+    [Header("Robber")]
     public GameObject robberObject;
 
+    [Header("Prefabs and Definitions")]
     public GameObject tilePrefab;
     public GameObject vertexPrefab;
     public GameObject edgePrefab;
@@ -15,9 +17,13 @@ public class BoardBehaviour : NetworkBehaviour
     float gridHeight = 4.82f;
     Vector3 startPosition = new Vector3(-4.82f * 6f, 0, 4.82f / 1.1547005f * -3);
 
+    [Header("Faces, Tiles and Vertices")]
     public GameObject[,] gridFaces;
     public GameObject[,,] gridVertices;
     public GameObject[,,] gridEdges;
+
+    [Header("Display Position")]
+    public float yOffset = 0;
 
     void Start()
     {
@@ -107,7 +113,7 @@ public class BoardBehaviour : NetworkBehaviour
      */
     public Vector3 GetPositionOfFaceCoordinate(int col, int row)
     {
-        Vector3 pos = new Vector3(col * gridHeight + (row * gridHeight / 2), 0, row * gridWidth) + startPosition;
+        Vector3 pos = new Vector3(col * gridHeight + (row * gridHeight / 2), yOffset, row * gridWidth) + startPosition;
         return pos;
     }
 
@@ -120,10 +126,10 @@ public class BoardBehaviour : NetworkBehaviour
         switch (vertexSpec)
         {
             case BoardGrid.VertexSpecifier.L:
-                pos = pos + new Vector3(-gridHeight / 2, 0, 0.28f * gridHeight);
+                pos = pos + new Vector3(-gridHeight / 2, yOffset, 0.28f * gridHeight);
                 break;
             case BoardGrid.VertexSpecifier.R:
-                pos = pos + new Vector3(gridHeight / 2, 0, -0.28f * gridHeight);
+                pos = pos + new Vector3(gridHeight / 2, yOffset, -0.28f * gridHeight);
                 break;
         }
 
@@ -139,13 +145,13 @@ public class BoardBehaviour : NetworkBehaviour
         switch (edgeSpec)
         {
             case BoardGrid.EdgeSpecifier.N:
-                pos = pos + new Vector3(gridHeight / 4, 0, gridWidth / 2);
+                pos = pos + new Vector3(gridHeight / 4, yOffset, gridWidth / 2);
                 break;
             case BoardGrid.EdgeSpecifier.W:
-                pos = pos + new Vector3(-gridHeight / 4, 0, gridWidth / 2);
+                pos = pos + new Vector3(-gridHeight / 4, yOffset, gridWidth / 2);
                 break;
             case BoardGrid.EdgeSpecifier.E:
-                pos = pos + new Vector3(gridHeight / 2, 0, 0);
+                pos = pos + new Vector3(gridHeight / 2, yOffset, 0);
                 break;
         }
 

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Mirror;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
@@ -44,6 +45,11 @@ public class MainMenu : MonoBehaviour
         {
             errorText.text = "Please enter values for IP and Port.";
         }
+    }
+
+    public void ChangeSelection(Int32 selection)
+    {
+        GameConfigManager.Instance.ChangeLoadout(selection);
     }
 
     public void QuitGame()

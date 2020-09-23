@@ -62,6 +62,8 @@ public class BoardHandler
         }
     }
 
+
+
     /**
      * Randomise the resource types for each tile in the grid.
      */
@@ -75,9 +77,21 @@ public class BoardHandler
     }
 
     /**
-     * Create resource types for all tiles
+     * Create resource types for all tiles based on a loadout
      */
-    public void SetupTileResourceTypes()
+    public void SetupTileResourceTypes(List<ResourceType> setupLoadout)
+    {
+        List<Face> faces = boardGrid.GetFacesAsList();
+        for (int i = 0; i < faces.Count; i++)
+        {
+            faces[i].tile.resourceType = setupLoadout[i];
+        }
+    }
+
+    /**
+     * Create random resource types for all tiles
+     */
+    public void SetupTileResourceTypesRandom()
     {
         // Create resources array
         List<ResourceType> resources = new List<ResourceType>();

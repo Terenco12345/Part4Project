@@ -7,9 +7,11 @@ public class PlayerBehaviour : NetworkBehaviour
 {
     Player player = null;
 
+    [Header("Colours and Materials")]
     public Color color;
     public Material transparentMaterial; // Used for placement ghost
 
+    [Header("Prefab Definitions")]
     public GameObject settlementPrefab;
     public GameObject roadPrefab;
     public GameObject cityPrefab;
@@ -20,6 +22,10 @@ public class PlayerBehaviour : NetworkBehaviour
 
     GameObject placementGhost;
 
+    [Header("Display Position")]
+    public float yOffset = 0;
+
+    [Header("Controller")]
     public PlayerController playerController;
 
     // Start is called before the first frame update
@@ -153,7 +159,7 @@ public class PlayerBehaviour : NetworkBehaviour
             {
                 settlements[i].SetActive(true);
                 settlements[i].GetComponent<MeshRenderer>().material.color = color;
-                settlements[i].transform.localPosition = new Vector3(spacing, 0, 0);
+                settlements[i].transform.localPosition = new Vector3(spacing, yOffset, 0);
                 spacing += 1.4f;
             }
             for(int i = player.storeSettlementNum; i < 5; i++)
@@ -166,7 +172,7 @@ public class PlayerBehaviour : NetworkBehaviour
             {
                 cities[i].SetActive(true);
                 cities[i].GetComponent<MeshRenderer>().material.color = color;
-                cities[i].transform.localPosition = new Vector3(spacing, 0, 3);
+                cities[i].transform.localPosition = new Vector3(spacing, yOffset, 3);
                 spacing += 1.4f;
             }
             for (int i = player.storeCityNum; i < 5; i++)
@@ -179,7 +185,7 @@ public class PlayerBehaviour : NetworkBehaviour
             {
                 roads[i].SetActive(true);
                 roads[i].GetComponent<MeshRenderer>().material.color = color;
-                roads[i].transform.localPosition = new Vector3(spacing, 0, 5);
+                roads[i].transform.localPosition = new Vector3(spacing, yOffset, 5);
                 spacing += 0.8f;
             }
             for (int i = player.storeRoadNum; i < 15; i++)

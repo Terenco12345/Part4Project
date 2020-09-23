@@ -28,7 +28,15 @@ public class Game
     public void SetupGame()
     {
         boardHandler.CreateTiles();
-        boardHandler.SetupTileResourceTypes();
+        if (GameConfigManager.Instance.resourceLoadout == null || GameConfigManager.Instance.resourceLoadout.Count == 0)
+        {
+            boardHandler.SetupTileResourceTypesRandom();
+        }
+        else
+        {
+            boardHandler.SetupTileResourceTypes(GameConfigManager.Instance.resourceLoadout);
+        }
+        
         boardHandler.SetupChanceTokens();
         boardHandler.SetupRobberAtDesert();
     }
