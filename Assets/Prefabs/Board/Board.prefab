@@ -106,6 +106,7 @@ MonoBehaviour:
     type: 3}
   edgePrefab: {fileID: 8590194804552374887, guid: eb2e3535ea4f0ba4cb70ec7c48d76d97,
     type: 3}
+  yOffset: 0
 --- !u!1001 &5027814973726261055
 PrefabInstance:
   m_ObjectHideFlags: 0

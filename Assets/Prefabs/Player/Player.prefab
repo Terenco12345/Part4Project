@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4353894556950434956}
   m_LocalRotation: {x: 0, y: 0.5093568, z: 0, w: 0.8605554}
-  m_LocalPosition: {x: -18.16, y: 1.49, z: -5.15}
+  m_LocalPosition: {x: -18.4, y: 0, z: -5.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -58,6 +58,7 @@ MonoBehaviour:
     type: 3}
   cityPrefab: {fileID: 4562821810682599750, guid: e42b6766188926342b3c79d90330e1bb,
     type: 3}
+  yOffset: -0.56
   playerController: {fileID: 1962889850464671814}
 --- !u!114 &1962889850464671814
 MonoBehaviour:
@@ -101,6 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3acb5ba0f9af4994a940e96838032fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   playerBehaviour: {fileID: 114273201759188083}
 --- !u!114 &7896194570239899324
 MonoBehaviour:

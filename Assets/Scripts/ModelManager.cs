@@ -15,14 +15,20 @@ public class ModelManager : NetworkBehaviour
     }
 
     public BoardBehaviour board;
-    public List<TileRenderer> tileSets;
+    public EnvironmentBehaviour environment;
 
+    [Header("Tile Sets")]
+    public List<TileRenderer> tileSets;
     public int tileSetSelection;
+
+    [Header("Environments")]
+    public List<GameObject> environments;
+    public int environmentSelection;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     public void UpdateTiles()
@@ -49,15 +55,34 @@ public class ModelManager : NetworkBehaviour
         }
     }
 
-    public void ToggleSelection()
+    public void UpdateEnvironment()
+    {
+        environment.SwapEnvironment(environments[environmentSelection]);
+    }
+
+    public void ToggleTilesetSelection()
     {
         PlayerCustomizationController playerCustomizationController = GameManager.Instance.GetLocalPlayer().GetComponent<PlayerCustomizationController>();
         if (tileSetSelection + 1 >= tileSets.Count)
         {
-            playerCustomizationController.ChangeSelection(0);
-        } else
+            playerCustomizationController.ChangeTilesetSelection(0);
+        }
+        else
         {
-            playerCustomizationController.ChangeSelection(tileSetSelection + 1);
+            playerCustomizationController.ChangeTilesetSelection(tileSetSelection + 1);
+        }
+    }
+
+    public void ToggleEnviromentSelection()
+    {
+        PlayerCustomizationController playerCustomizationController = GameManager.Instance.GetLocalPlayer().GetComponent<PlayerCustomizationController>();
+        if (environmentSelection + 1 >= environments.Count)
+        {
+            playerCustomizationController.ChangeEnvironmentSelection(0);
+        }
+        else
+        {
+            playerCustomizationController.ChangeEnvironmentSelection(environmentSelection + 1);
         }
     }
 }
