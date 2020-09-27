@@ -29,11 +29,9 @@ public class PlayerTradeManager : NetworkBehaviour
     [SyncVar]
     public bool trading = false; // This flag is enabled if there is a trade in progress.
 
+    [Header("Receiver")]
     [SyncVar]
     public bool receiverAccept = false;
-    [SyncVar]
-    public bool offererAccept = false;
-
     [SyncVar]
     public string receiverId = "";
     [SyncVar]
@@ -47,6 +45,9 @@ public class PlayerTradeManager : NetworkBehaviour
     [SyncVar]
     public int receiverOre = 0;
 
+    [Header("Offerer")]
+    [SyncVar]
+    public bool offererAccept = false;
     [SyncVar]
     public string offererId = "";
     [SyncVar]
