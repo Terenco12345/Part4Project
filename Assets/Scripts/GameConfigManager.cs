@@ -7,7 +7,7 @@ using static ResourceType;
 /**
  * This game manager holds player and game information.
  */
-public class GameConfigManager : NetworkBehaviour
+public class GameConfigManager : MonoBehaviour
 {
     // Singleton
     public static GameConfigManager Instance { get; private set; }
