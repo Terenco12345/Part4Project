@@ -851,10 +851,14 @@ MonoBehaviour:
   tileSets:
   - {fileID: -2722681208287305406, guid: fafeede3489a86f42ab1a8e8ce47c2be, type: 3}
   - {fileID: -2722681208287305406, guid: c89988995ad6c764d8375e599b571a49, type: 3}
+  - {fileID: -2722681208287305406, guid: b93a8373f8809fd4ab81abad5991bb6d, type: 3}
   tileSetSelection: 0
   environments:
   - {fileID: 891153918198172829, guid: b4399be306716a946bfa87d956b9717f, type: 3}
+  - {fileID: 891153918198172829, guid: d9db378e905f68d4ba91a2cacf508794, type: 3}
   - {fileID: 891153918198172829, guid: 3288578ab7269bf499f6472a7ee6e295, type: 3}
+  - {fileID: 891153918198172829, guid: 18e1f8d78be0a754cb3a7957df99a8bd, type: 3}
+  - {fileID: 891153918198172829, guid: 56cf24ae266da8d419575dc267b02d23, type: 3}
   environmentSelection: 0
 --- !u!4 &751364315
 Transform:
