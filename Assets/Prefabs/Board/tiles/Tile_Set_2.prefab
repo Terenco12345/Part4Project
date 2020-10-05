@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3683952389361237915
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7378002088869445189}
+  - component: {fileID: -5055973986181556091}
+  - component: {fileID: -2722681208287305406}
+  - component: {fileID: 6804145114528772514}
+  - component: {fileID: -9182428261478535594}
+  m_Layer: 0
+  m_Name: Tile_Set_2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7378002088869445189
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3683952389361237915}
+  m_LocalRotation: {x: -0.7069834, y: 0, z: 0, w: 0.7072302}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -89.98, y: 0, z: 0}
+--- !u!64 &-5055973986181556091
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3683952389361237915}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5062246478642505140, guid: 1229b3d3fad252449b86d9622d6af211, type: 3}
+--- !u!114 &-2722681208287305406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3683952389361237915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92ea473f9ef5d334e9580fb19f76d1a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  col: 0
+  row: 0
+  noneTile: {fileID: 4123665463725482103, guid: c179c507929aad249b9db9f59ea08fac,
+    type: 3}
+  forestTile: {fileID: 4123665463725482103, guid: 4cce565a3c83855459406d0efcddf2de,
+    type: 3}
+  hillTile: {fileID: 4123665463725482103, guid: 1bab917661989fd449ccd491cb2fc72b,
+    type: 3}
+  meadowTile: {fileID: 4123665463725482103, guid: 65e430354b5b6154bbb5b9ec7ba49bc0,
+    type: 3}
+  mountainTile: {fileID: 4123665463725482103, guid: 5d3f2eac18ab768478cb4613fbf8ce14,
+    type: 3}
+  fieldTile: {fileID: 4123665463725482103, guid: 392a71f5f1a8ab44b9724b01887d14f5,
+    type: 3}
+  desertTile: {fileID: 4123665463725482103, guid: 83f64c8d568890041a26b24601987193,
+    type: 3}
+  chanceTokenPrefab: {fileID: 7881650181230994622, guid: 17560b2bb575afa4eaa178e4facbd534,
+    type: 3}
+  tileResourceType: 0
+--- !u!114 &6804145114528772514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3683952389361237915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ceb57db613d444dbae1a14e0d5c17d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inspectionText: 
+--- !u!64 &-9182428261478535594
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3683952389361237915}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 5062246478642505140, guid: 1229b3d3fad252449b86d9622d6af211, type: 3}
